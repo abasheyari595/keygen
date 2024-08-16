@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔑 استخراج مفاتيح هامستر</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>مفاتيح هامستر</h1>
+        <div id="formContainer">
+            <div class="form-group" id="gameSelectGroup">
+                <label for="gameSelect">: اختر لعبه</label>
+                <select id="gameSelect">
+                    <option value="1"> Riding Extreme 3D</option>
+                    <option value="2"> Chain Cube 2048</option>
+                    <option value="3"> My Clone Army</option>
+                    <option value="4"> Train Miner</option>
+                    <option value="5"> Merge Away</option>
+                    <option value="6"> Twerk Race 3D (NEW)</option>
+                </select>
+            </div>
+            <div class="form-group" id="keyCountGroup">
+                <label for="keyCountSelect">: 🔑 اختر عدد المفاتيح</label>
+                <select id="keyCountSelect">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            <button id="startBtn">🔑 بدء الاستخراج</button>
+        </div>
+
+        <div id="progressContainer" class="hidden">
+            <div class="progress-bar">
+                <div id="progressBar"></div>
+            </div>
+            <p id="progressText">0%</p>
+            <p id="progressLog">⏰ جاري</p>
+        </div>
+
+        <div id="keyContainer" class="hidden">
+            <h2 id="generatedKeysTitle" class="hidden">🔑 المفاتيح</h2>
+            <div id="keysList"></div>
+            <button id="copyAllBtn" class="hidden">✅ نسخ الكل</button>
+        </div>
+
+        <p id="keyCountLabel">: عدد المفاتيح</p>
+
+        <button id="generateMoreBtn" class="hidden"></button>
+        <p id="copyStatus" class="hidden"></p>
+        
+        <div class="footer">
+            <p></p>
+            <button id="sourceCode">تواصل مع المطور</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
