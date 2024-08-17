@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < 11; i++) {
                 await sleep(EVENTS_DELAY * delayRandom());
                 const hasCode = await emulateProgress(clientToken, game.promoId);
-                updateProgress(7 / keyCount, '⏰ برجاء الانتظار من 1-3 دقائق');
+                updateProgress(7 / keyCount, '⏰ انتظر دقيقة');
                 if (hasCode) {
                     break;
                 }
