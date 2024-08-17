@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         progressBar.style.width = '0%';
         progressText.innerText = '0%';
-        progressLog.innerText = '⏰ جاري';
+        progressLog.innerText = '.... بدء الترمنال';
         progressContainer.classList.remove('hidden');
         keyContainer.classList.add('hidden');
         generatedKeysTitle.classList.add('hidden');
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < 11; i++) {
                 await sleep(EVENTS_DELAY * delayRandom());
                 const hasCode = await emulateProgress(clientToken, game.promoId);
-                updateProgress(7 / keyCount, '... بدء الترمنال');
+                updateProgress(7 / keyCount, '⏰ برجاء الانتظار من 1-3 دقائق');
                 if (hasCode) {
                     break;
                 }
