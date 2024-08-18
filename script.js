@@ -1,38 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const EVENTS_DELAY = 20000;
+    
+    const MAX_KEYS_PER_GAME_PER_DAY = 10;
+    //const EVENTS_DELAY = 20000;
 
     const games = {
         1: {
             name: 'Riding Extreme 3D',
             appToken: 'd28721be-fd2d-4b45-869e-9f253b554e50',
             promoId: '43e35910-c168-4634-ad4f-52fd764a843f',
+            eventsDelay: 22000,
+            attemptsNumber: 22,
         },
         2: {
             name: 'Chain Cube 2048',
             appToken: 'd1690a07-3780-4068-810f-9b5bbf2931b2',
             promoId: 'b4170868-cef0-424f-8eb9-be0622e8e8e3',
+            eventsDelay: 20000,
+            attemptsNumber: 10
         },
         3: {
             name: 'My Clone Army',
             appToken: '74ee0b5b-775e-4bee-974f-63e7f4d5bacb',
             promoId: 'fe693b26-b342-4159-8808-15e3ff7f8767',
+            eventsDelay: 70000,
+            attemptsNumber: 11,
         },
         4: {
             name: 'Train Miner',
             appToken: '82647f43-3f87-402d-88dd-09a90025313f',
             promoId: 'c4480ac7-e178-4973-8061-9ed5b2e17954',
+            eventsDelay: 20000,
+            attemptsNumber: 10,
         },
         5: {
-            name: 'Merge Away',
+            name: 'MergeAway',
             appToken: '8d1cc2ad-e097-4b86-90ef-7a27e19fb833',
-            promoId: 'dc128d28-c45b-411c-98ff-ac7726fbaea4'
+            promoId: 'dc128d28-c45b-411c-98ff-ac7726fbaea4',
+            eventsDelay: 20000,
+            attemptsNumber: 10,
         },
         6: {
-        name: 'Twerk Race 3D',
-        appToken: '61308365-9d16-4040-8bb0-2f4a4c69074c',
-        promoId: '61308365-9d16-4040-8bb0-2f4a4c69074c'
-    }
-        
+    name: 'Twerk Race 3D',
+    appToken: '61308365-9d16-4040-8bb0-2f4a4c69074c',
+    promoId: '61308365-9d16-4040-8bb0-2f4a4c69074c',
+            eventsDelay: 20000,
+        attemptsNumber: 10,
+            
+        }
     };
 
     const startBtn = document.getElementById('startBtn');
@@ -48,195 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const generatedKeysTitle = document.getElementById('generatedKeysTitle');
     const gameSelect = document.getElementById('gameSelect');
     const copyStatus = document.getElementById('copyStatus');
-    const sourceCode = document.getElementById('sourceCode');
-    const gameSelectGroup = document.getElementById('gameSelectGroup');
-    const keyCountGroup = document.getElementById('keyCountGroup');
+    const previousKeysContainer = document.getElementById('previousKeysContainer');
+    const previousKeysList = document.getElementById('previousKeysList');
 
-    startBtn.addEventListener('click', async () => {
-        const gameChoice = parseInt(gameSelect.value);
-        const keyCount = parseInt(keyCountSelect.value);
-        const game = games[gameChoice];
-
-        // Hide the form sections
-        gameSelectGroup.style.display = 'none';
-        keyCountGroup.style.display = 'none';
-
-        keyCountLabel.innerText = `عدد المفاتيح : ${keyCount}`;
-
-        progressBar.style.width = '0%';
-        progressText.innerText = '0%';
-        progressLog.innerText = '.... بدء الترمنال';
-        progressContainer.classList.remove('hidden');
-        keyContainer.classList.add('hidden');
-        generatedKeysTitle.classList.add('hidden');
-        keysList.innerHTML = '';
-        keyCountSelect.classList.add('hidden');
-        gameSelect.classList.add('hidden');
-        startBtn.classList.add('hidden');
-        copyAllBtn.classList.add('hidden');
-        startBtn.disabled = true;
-
-        let progress = 0;
-        const updateProgress = (increment, message) => {
-            progress += increment;
-            progressBar.style.width = `${progress}%`;
-            progressText.innerText = `${progress}%`;
-            progressLog.innerText = message;
-        };
-
-        const generateKeyProcess = async () => {
-            const clientId = generateClientId();
-            let clientToken;
-            try {
-                clientToken = await login(clientId, game.appToken);
-            } catch (error) {
-                alert(`: ❌ فشل تسجيل الدخول${error.message}`);
-                startBtn.disabled = false;
-                return null;
-            }
-
-            for (let i = 0; i < 11; i++) {
-                await sleep(EVENTS_DELAY * delayRandom());
-                const hasCode = await emulateProgress(clientToken, game.promoId);
-                updateProgress(7 / keyCount, '⏰ انتظر دقيقة');
-                if (hasCode) {
-                    break;
-                }
-            }
-
-            try {
-                const key = await generateKey(clientToken, game.promoId);
-                updateProgress(30 / keyCount, '⏰ جاري الاستخراج');
-                return key;
-            } catch (error) {
-                alert(`: ❌ فشل استخراج المفاتيح${error.message}`);
-                return null;
-            }
-        };
-
-        const keys = await Promise.all(Array.from({ length: keyCount }, generateKeyProcess));
-
-        if (keys.length > 1) {
-            keysList.innerHTML = keys.filter(key => key).map(key =>
-                `<div class="key-item">
-                    <input type="text" value="${key}" readonly>
-                    <button class="copyKeyBtn" data-key="${key}">نسخ</button>
-                </div>`
-            ).join('');
-            copyAllBtn.classList.remove('hidden');
-        } else if (keys.length === 1) {
-            keysList.innerHTML =
-                `<div class="key-item">
-                    <input type="text" value="${keys[0]}" readonly>
-                    <button class="copyKeyBtn" data-key="${keys[0]}">نسخ</button>
-                </div>`;
-        }
-
-        keyContainer.classList.remove('hidden');
-        generatedKeysTitle.classList.remove('hidden');
-        document.querySelectorAll('.copyKeyBtn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const key = event.target.getAttribute('data-key');
-                
-                // Check if navigator.clipboard is available
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(key).then(() => {
-                        copyStatus.classList.remove('hidden');
-                        setTimeout(() => copyStatus.classList.add('hidden'), 2000);
-                    }).catch(err => {
-                        console.error(': ❌ فشل في النسخ', err);
-                    });
-                } else {
-                    // Fallback method for non-HTTPS environments
-                    const textArea = document.createElement('textarea');
-                    textArea.value = key;
-                    textArea.style.position = 'fixed';  // Avoid scrolling to bottom of page
-                    textArea.style.top = '0';
-                    textArea.style.left = '0';
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-
-                    try {
-                        const successful = document.execCommand('copy');
-                        const msg = successful ? 'successful' : 'unsuccessful';
-                        console.log('Fallback: Copying text command was ' + msg);
-                        if (successful) {
-                            copyStatus.classList.remove('hidden');
-                            setTimeout(() => copyStatus.classList.add('hidden'), 2000);
-                        }
-                    } catch (err) {
-                        console.error('❌ غير قادر على النسخ', err);
-                    }
-
-                    document.body.removeChild(textArea);
-                }
-            });
-        });
-        copyAllBtn.addEventListener('click', () => {
-            const keysText = keys.filter(key => key).join('\n');
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(keysText).then(() => {
-                    copyStatus.classList.remove('hidden');
-                    setTimeout(() => copyStatus.classList.add('hidden'), 2000);
-                }).catch(err => {
-                    console.error(': ❌ فشل في النسخ', err);
-                });
-            } else {
-                const textArea = document.createElement('textarea');
-                textArea.value = keysText;
-                textArea.style.position = 'fixed';  // Avoid scrolling to bottom of page
-                textArea.style.top = '0';
-                textArea.style.left = '0';
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-
-                try {
-                    const successful = document.execCommand('copy');
-                    const msg = successful ? 'successful' : 'unsuccessful';
-                    console.log('Fallback: Copying text command was ' + msg);
-                    if (successful) {
-                        copyStatus.classList.remove('hidden');
-                        setTimeout(() => copyStatus.classList.add('hidden'), 2000);
-                    }
-                } catch (err) {
-                    console.error('❌ غير قادر على النسخ', err);
-                }
-
-                document.body.removeChild(textArea);
+    const initializeLocalStorage = () => {
+        const now = new Date().toISOString().split('T')[0];
+        Object.values(games).forEach(game => {
+            const storageKey = `keys_generated_${game.name}`;
+            const storedData = JSON.parse(localStorage.getItem(storageKey));
+            if (!storedData || storedData.date !== now) {
+                localStorage.setItem(storageKey, JSON.stringify({ date: now, count: 0, keys: [] }));
             }
         });
-
-        progressBar.style.width = '100%';
-        progressText.innerText = '100%';
-        progressLog.innerText = '✅';
-
-        startBtn.classList.remove('hidden');
-        keyCountSelect.classList.remove('hidden');
-        gameSelect.classList.remove('hidden');
-        startBtn.disabled = false;
-    });
-
-    document.getElementById('generateMoreBtn').addEventListener('click', () => {
-        progressContainer.classList.add('hidden');
-        keyContainer.classList.add('hidden');
-        startBtn.classList.remove('hidden');
-        keyCountSelect.classList.remove('hidden');
-        gameSelect.classList.remove('hidden');
-        generatedKeysTitle.classList.add('hidden');
-        copyAllBtn.classList.add('hidden');
-        keysList.innerHTML = '';
-        keyCountLabel.innerText = ': عدد المفاتيح';
-        
-        // Show the form sections again
-        gameSelectGroup.style.display = 'block';
-        keyCountGroup.style.display = 'block';
-    });
-
-    sourceCode.addEventListener('click', () => {
-        window.open('https://telegram.me/v7x01', '_blank');
-    });
+    };
 
     const generateClientId = () => {
         const timestamp = Date.now();
@@ -317,4 +155,168 @@ document.addEventListener('DOMContentLoaded', () => {
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const delayRandom = () => Math.random() / 3 + 1;
+
+    initializeLocalStorage();
+
+    startBtn.addEventListener('click', async () => {
+        const gameChoice = parseInt(gameSelect.value);
+        const keyCount = parseInt(keyCountSelect.value);
+        const game = games[gameChoice];
+
+        const storageKey = `keys_generated_${game.name}`;
+        const storedData = JSON.parse(localStorage.getItem(storageKey));
+
+        if (storedData.count + keyCount > MAX_KEYS_PER_GAME_PER_DAY) {
+            alert(`يمكن استخراج ${MAX_KEYS_PER_GAME_PER_DAY - storedData.count} مفاتيح في لعبة ${game.name} لليوم كحد اقصي.`);
+            previousKeysList.innerHTML = storedData.keys.map(key =>
+                `<div class="key-item">
+                    <input type="text" value="${key}" readonly>
+                </div>`
+            ).join('');
+            previousKeysContainer.classList.remove('hidden');
+            return;
+        }
+
+        keyCountLabel.innerText = `عدد المفاتيح : ${keyCount}`;
+
+        progressBar.style.width = '0%';
+        progressText.innerText = '0%';
+        progressLog.innerText = '... بدء الترمنال \n يمكن ان ياخذ وقتا لتسجيل الدخول في لعبة كلون';
+        progressContainer.classList.remove('hidden');
+        keyContainer.classList.add('hidden');
+        generatedKeysTitle.classList.add('hidden');
+        keysList.innerHTML = '';
+        keyCountSelect.classList.add('hidden');
+        gameSelect.classList.add('hidden');
+        startBtn.classList.add('hidden');
+        copyAllBtn.classList.add('hidden');
+        startBtn.disabled = true;
+
+        let progress = 0;
+        const updateProgress = (increment, message) => {
+            progress += increment;
+            progressBar.style.width = `${progress}%`;
+            progressText.innerText = `${progress}%`;
+            progressLog.innerText = message;
+        };
+
+        const generateKeyProcess = async () => {
+            const clientId = generateClientId();
+            let clientToken;
+            try {
+                clientToken = await login(clientId, game.appToken);
+            } catch (error) {
+                alert(`: ❌ فشل تسجيل الدخول ${error.message}`);
+                startBtn.disabled = false;
+                return null;
+            }
+
+            for (let i = 0; i < game.attemptsNumber ; i++) {
+                await sleep(game.eventsDelay * delayRandom());
+                const hasCode = await emulateProgress(clientToken, game.promoId);
+                updateProgress(((100 / game.attemptsNumber) / keyCount), '⏰ انتظر');
+                if (hasCode) {
+                    break;
+                }
+            }
+
+            try {
+                const key = await generateKey(clientToken, game.promoId);
+                updateProgress(30 / keyCount, 'جاري الاستخراج');
+                return key;
+            } catch (error) {
+                alert(`: ❌ فشل استخراج المفاتيح ${error.message}`);
+                return null;
+            }
+        };
+
+        const keys = await Promise.all(Array.from({ length: keyCount }, generateKeyProcess));
+
+        if (keys.length > 1) {
+            keysList.innerHTML = keys.filter(key => key).map(key =>
+                `<div class="key-item">
+                    <input type="text" value="${key}" readonly>
+                    <button class="copyKeyBtn" data-key="${key}">نسخ</button>
+                </div>`
+            ).join('');
+            copyAllBtn.classList.remove('hidden');
+        } else if (keys.length === 1) {
+            keysList.innerHTML =
+                `<div class="key-item">
+                    <input type="text" value="${keys[0]}" readonly>
+                    <button class="copyKeyBtn" data-key="${keys[0]}">نسخ</button>
+                </div>`;
+        }
+
+        storedData.count += keys.filter(key => key).length;
+        storedData.keys.push(...keys.filter(key => key));
+        localStorage.setItem(storageKey, JSON.stringify(storedData));
+
+        keyContainer.classList.remove('hidden');
+        generatedKeysTitle.classList.remove('hidden');
+        document.querySelectorAll('.copyKeyBtn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const key = event.target.getAttribute('data-key');
+                navigator.clipboard.writeText(key).then(() => {
+                    copyStatus.innerText = `تم نسخ ${key}`;
+                    setTimeout(() => {
+                        copyStatus.innerText = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error(' : ❌ لايمكن النسخ', err);
+                });
+            });
+        });
+
+        startBtn.disabled = false;
+        keyCountSelect.classList.remove('hidden');
+        gameSelect.classList.remove('hidden');
+        startBtn.classList.remove('hidden');
+    });
+
+    copyAllBtn.addEventListener('click', () => {
+        const allKeys = Array.from(document.querySelectorAll('.key-item input')).map(input => input.value).join('\n');
+        navigator.clipboard.writeText(allKeys).then(() => {
+            copyStatus.innerText = '✅ تم النسخ';
+            setTimeout(() => {
+                copyStatus.innerText = '';
+            }, 2000);
+        }).catch(err => {
+            console.error(' : ❌ لايمكن النسخ', err);
+        });
+    });
+
+    document.getElementById('devBtn').addEventListener('click', () => {
+        window.open('https://telegram.me/v7x01', '_blank');
+    });
+
+    document.getElementById('ShowKeysBtn').addEventListener('click', () => {
+        const generatedCodesContainer = document.getElementById('generatedCodesContainer');
+        const generatedCodesList = document.getElementById('generatedCodesList');
+        generatedCodesList.innerHTML = ''; // Clear the list
+
+        let codesGeneratedToday = [];
+
+        Object.keys(games).forEach(key => {
+            const game = games[key];
+            const storageKey = `keys_generated_${game.name}`;
+            const storedData = JSON.parse(localStorage.getItem(storageKey));
+
+            if (storedData && storedData.keys && storedData.keys.length > 0) {
+                codesGeneratedToday = codesGeneratedToday.concat(storedData.keys.map(code => {
+                    return `<li>${game.name}: ${code}</li>`;
+                }));
+            }
+        });
+
+        if (codesGeneratedToday.length > 0) {
+            generatedCodesList.innerHTML = codesGeneratedToday.join('');
+        } else {
+            generatedCodesList.innerHTML = '<li>لايوجد مفاتيح تم استخراجها اليوم</li>';
+        }
+
+        generatedCodesContainer.style.display = 'block';
+    });
+
+    
 });
