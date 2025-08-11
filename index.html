@@ -1,890 +1,486 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ملخص شامل في محاسبة التكاليف</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --main-color: #003366; /* كحلي */
-            --secondary-color: #005A9C; /* أزرق أغمق */
-            --accent-color: #D4AF37; /* ذهبي */
-            --bg-light: #f8f9fa;
-            --text-color: #333;
-            --border-color: #dee2e6;
-        }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Radiology Vault — تقارير الأشعة (احترافي)</title>
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #e9ecef;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.8;
-        }
+<!-- Tailwind (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- QR library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
-        .page {
-            background: white;
-            width: 21cm;
-            min-height: 29.7cm;
-            margin: 2rem auto;
-            padding: 0.2cm;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-            box-sizing: border-box;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .page-header {
-            text-align: center;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-            border-bottom: 4px solid var(--secondary-color);
-            background: linear-gradient(135deg, var(--main-color), var(--secondary-color));
-            color: white;
-            padding: 15px;
-            border-radius: 10px 10px 0 0;
-        }
-
-        .header-title {
-            font-family: 'Amiri', serif;
-            font-size: 26px;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-        }
-        
-        .header-subtitle {
-            font-size: 20px;
-            margin: 5px 0 0;
-            font-weight: 500;
-            color: var(--accent-color);
-            display: block;
-        }
-        
-        .page-content {
-            flex-grow: 1;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 800;
-            color: var(--main-color);
-        }
-
-        h1 {
-            font-size: 28px;
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-right: 15px;
-            border-right: 5px solid var(--secondary-color);
-            background-color: var(--bg-light);
-            padding-top: 5px;
-            padding-bottom: 5px;
-            border-radius: 5px 0 0 5px;
-        }
-
-        h3 {
-            font-size: 20px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            color: var(--secondary-color);
-            border-bottom: 1px dashed var(--accent-color);
-            padding-bottom: 5px;
-        }
-
-        .definition-box, .objective-box, .info-box {
-            background-color: #f1f8ff;
-            border: 1px solid #bde0fe;
-            border-right: 5px solid #007bff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            page-break-inside: avoid;
-        }
-
-        .definition-box p, .objective-box p, .info-box p {
-            margin: 0;
-            font-size: 16px;
-        }
-
-        ul {
-            list-style-type: none;
-            padding-right: 20px;
-        }
-
-        ul li {
-            position: relative;
-            padding-right: 30px;
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
-
-        ul li::before {
-            content: '✔';
-            position: absolute;
-            right: 0;
-            top: 0;
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            font-size: 14px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            page-break-inside: avoid;
-        }
-
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 12px 15px;
-            text-align: right;
-        }
-
-        th {
-            background-color: var(--main-color);
-            color: white;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--bg-light);
-        }
-        
-        tr:hover {
-            background-color: #e2e6ea;
-        }
-
-        .equation-box {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            border-right: 5px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: 500;
-            text-align: center;
-            font-size: 16px;
-            page-break-inside: avoid;
-        }
-        
-        .note {
-            background-color: #e2f0d9;
-            border: 1px solid #c8e6c9;
-            border-right: 5px solid #4caf50;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: 500;
-            font-size: 15px;
-        }
-
-        .print-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 15px 30px;
-            background-color: var(--main-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        
-        .print-button:hover {
-            background-color: var(--secondary-color);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .page-footer {
-            text-align: center;
-            margin-top: auto;
-            padding-top: 10px;
-            font-size: 12px;
-            color: #777;
-            border-top: 1px solid #eee;
-        }
-
-@media print {
-    body {
-        background-color: white;
-    }
-    .print-button {
-        display: none;
-    }
-    .page {
-        width: auto;
-        height: auto;
-        min-height: 27cm; /* Adjust for print */
-        margin: 0;
-        padding: 2mm 7mm 10mm 7mm; /* أعلى - يمين - أسفل - شمال */
-        box-shadow: none;
-        border: none;
-        page-break-after: always;
-    }
-    .page-header {
-        background: linear-gradient(135deg, var(--main-color), var(--secondary-color));
-        -webkit-print-color-adjust: exact; 
-        color-adjust: exact;
-    }
-    th {
-        background-color: var(--main-color);
-        -webkit-print-color-adjust: exact; 
-        color-adjust: exact;
-    }
-    tr:nth-child(even) {
-        background-color: var(--bg-light);
-        -webkit-print-color-adjust: exact; 
-        color-adjust: exact;
-    }
-    .definition-box, .info-box, .note, .equation-box {
-        -webkit-print-color-adjust: exact; 
-        color-adjust: exact;
-    }
-    @page {
-        size: A4;
-        margin: 0.5cm; /* Minimal margins as requested */
-    }
-}
-    </style>
+<style>
+  body { font-family: Tahoma, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#f8fafc,#ffffff); }
+  .card { background: rgba(255,255,255,0.95); box-shadow: 0 8px 30px rgba(2,6,23,0.06); border-radius: 12px; }
+  pre.code { background:#0b1220;color:#e6eef8;padding:12px;border-radius:8px; max-height:320px; overflow:auto; font-size:12px; }
+  .hint{ color:#6b7280; font-size:0.9rem; }
+</style>
 </head>
-<body>
+<body class="p-6">
 
-    <button class="print-button" onclick="window.print()">🖨️ طباعة الملخص</button>
-    
-    <!-- PAGE 1 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h1>ملخص شامل في محاسبة التكاليف</h1>
-            <h2>1. ماهية محاسبة التكاليف وأهدافها</h2>
-            <div class="definition-box">
-                <p><strong>تعريف محاسبة التكاليف:</strong> هي علم يشتمل على مجموعة من المبادئ والأسس المحاسبية اللازمة لتقدير وتجميع بيانات التكاليف وتحليلها وتبويبها، بهدف تحديد تكلفة الوحدة المنتجة (سلعة أو خدمة)، والرقابة عليها، ومساعدة الإدارة في رسم السياسات واتخاذ القرارات.</p>
-            </div>
-            <h3>أهداف محاسبة التكاليف الرئيسية:</h3>
-            <ul>
-                <li><strong>تحديد تكلفة الوحدة المنتجة أو الخدمة:</strong> الهدف الأساسي لمعرفة ربحية المنتجات وتقييم المخزون.</li>
-                <li><strong>الرقابة على التكاليف:</strong> مقارنة التكاليف الفعلية بالتقديرية لكشف الانحرافات ومعالجتها ومنع الإسراف.</li>
-                <li><strong>المساعدة في اتخاذ قرار التسعير:</strong> توفير بيانات التكلفة كأساس لتحديد أسعار بيع المنتجات.</li>
-                <li><strong>ترشيد القرارات الإدارية:</strong> مساعدة الإدارة في المفاضلة بين البدائل المتاحة (مثل التصنيع أو الشراء).</li>
-                <li><strong>التخطيط للمستقبل:</strong> إعداد الموازنات التقديرية للتكاليف المستقبلية.</li>
-            </ul>
-
-            <h2>2. مفاهيم أساسية</h2>
-            <div class="info-box">
-                <h3>وحدة التكلفة (Cost Unit)</h3>
-                <p>هي وحدة التعبير عن الإنتاج وقياسه. قد تكون بالحجم، بالوزن، أو بالطول في حالة تجانس الإنتاج. وفي حالة عدم التجانس، يكون "أمر التشغيل" هو وحدة التكلفة.</p>
-            </div>
-            <div class="info-box">
-                <h3>مركز التكلفة (Cost Center)</h3>
-                <p>هو دائرة نشاط معين متجانس أو خدمات من نوع معين متجانسة (مثل قسم التقطيع، قسم التجميع). يحتوي على مجموعة من عوامل الإنتاج المتماثلة وينتج عنه منتج أو خدمة متميزة قابلة للقياس.</p>
-            </div>
-        </div>
-        <div class="page-footer">الصفحة 1 من 11</div>
+<div class="max-w-6xl mx-auto">
+  <header class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-extrabold text-sky-600">Radiology Vault</h1>
+      <p class="text-sm text-slate-500">عرض تقارير الأشعة — Static + Client-side Encryption (AES-GCM, PBKDF2)</p>
     </div>
+    <div class="text-sm text-slate-400">نُسخة آمنة للـ GitHub Pages — أمان محلي</div>
+  </header>
 
-    <!-- PAGE 2 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h2>3. مقارنة بين المحاسبة المالية ومحاسبة التكاليف</h2>
-            <p>على الرغم من ارتباطهما، توجد فروق جوهرية بين الفرعين:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>زاوية المقارنة</th>
-                        <th>المحاسبة المالية</th>
-                        <th>محاسبة التكاليف</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>وحدة المحاسبة</strong></td>
-                        <td>المنشأة ككل</td>
-                        <td>الإدارات والأقسام ومراكز النشاط</td>
-                    </tr>
-                    <tr>
-                        <td><strong>الفترة المحاسبية</strong></td>
-                        <td>سنة مالية</td>
-                        <td>فترة تكاليفية (يوم، أسبوع، شهر)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>نوعية البيانات</strong></td>
-                        <td>مالية فقط</td>
-                        <td>كمية ومالية</td>
-                    </tr>
-                    <tr>
-                        <td><strong>أساس إعداد البيانات</strong></td>
-                        <td>فعلية وتاريخية</td>
-                        <td>تقديرية وفعلية</td>
-                    </tr>
-                    <tr>
-                        <td><strong>نوعية العمليات</strong></td>
-                        <td>خارجية (مع الغير)</td>
-                        <td>داخلية (بين الإدارات)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>الجهة المستفيدة</strong></td>
-                        <td>جهات خارجية (مستثمرون، بنوك) وإدارة عليا</td>
-                        <td>إدارة المنشأة بجميع مستوياتها</td>
-                    </tr>
-                    <tr>
-                        <td><strong>الهدف</strong></td>
-                        <td>تحديد نتيجة الأعمال والمركز المالي</td>
-                        <td>تحديد تكلفة الإنتاج، الرقابة، مساعدة الإدارة</td>
-                    </tr>
-                    <tr>
-                        <td><strong>سرية البيانات</strong></td>
-                        <td>علنية ومنشورة</td>
-                        <td>سرية وداخلية</td>
-                    </tr>
-                    <tr>
-                        <td><strong>درجة التفصيل</strong></td>
-                        <td>إجمالية</td>
-                        <td>تفصيلية وتحليلية</td>
-                    </tr>
-                </tbody>
-            </table>
-            <h3>أوجه التشابه والارتباط:</h3>
-            <ul>
-                <li>كلاهما يتبع نفس المبادئ المحاسبية العامة ويستخدم نظام القيد المزدوج.</li>
-                <li>يتعاونان في تحقيق الرقابة من خلال مقارنة بيانات التكاليف التفصيلية بالأرقام الإجمالية المالية.</li>
-                <li>محاسبة التكاليف تحدد تكلفة المخزون، وهي معلومة ضرورية للمحاسبة المالية لإعداد القوائم المالية.</li>
-            </ul>
-        </div>
-        <div class="page-footer">الصفحة 2 من 11</div>
-    </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <!-- PAGE 3 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h1>تبويب عناصر التكاليف</h1>
-            <p>يقصد به تقسيم بنود التكاليف إلى مجموعات متجانسة بناءً على أساس معين لتسهيل التحليل وتحقيق أهداف الإدارة.</p>
-            
-            <h2>أولاً: التبويب حسب طبيعة العنصر (التبويب النوعي)</h2>
-            <p>يقسم التكاليف حسب طبيعتها إلى ثلاثة عناصر رئيسية:</p>
-            <div class="info-box">
-                <h3>1. عنصر تكلفة المواد</h3>
-                <p>من أهم العناصر، وتشمل المواد الأولية التي تدخل مباشرة في المنتج (مثل الخشب في الأثاث)، والمواد المساعدة التي لا تدخل مباشرة (مثل الزيوت والشحوم للآلات).</p>
-            </div>
-            <div class="info-box">
-                <h3>2. عنصر تكلفة الأجور (العمالة)</h3>
-                <p>تشمل كل ما يُدفع للعنصر البشري مقابل عمله، سواء كان عملًا يدويًا أو ذهنيًا، وسواء كان مرتبطًا مباشرة بالإنتاج (أجور عمال الإنتاج) أو غير مباشر (مرتبات المشرفين).</p>
-            </div>
-            <div class="info-box">
-                <h3>3. عنصر تكلفة الخدمات (المصروفات الأخرى)</h3>
-                <p>تشمل كل التكاليف الأخرى بخلاف المواد والأجور، مثل: إيجار المصنع، استهلاك الآلات، الكهرباء، الصيانة، التأمين، الإعلان.</p>
-            </div>
+    <!-- Patient panel -->
+    <section class="card p-6">
+      <h2 class="text-lg font-semibold mb-2">بحث المريض</h2>
+      <p class="hint mb-3">أدخل الكود الذي استلمته (أو امسحه برمز QR خارجي)</p>
 
-            <h2>ثانياً: التبويب حسب وظائف المشروع (التبويب الوظيفي)</h2>
-            <p>يربط التكاليف بالوظيفة التي استفادت منها داخل المنشأة:</p>
-            <ul>
-                <li><strong>تكاليف الإنتاج (صناعية):</strong> كل التكاليف التي تُنفق داخل المصنع لتحويل المواد الخام إلى منتج تام (مواد خام، أجور عمال إنتاج، إهلاك آلات المصنع).</li>
-                <li><strong>تكاليف التسويق (بيعية):</strong> كل التكاليف التي تُنفق لتسويق وبيع المنتج (إعلان، عمولة رجال البيع، إيجار المعرض).</li>
-                <li><strong>تكاليف إدارية وتمويلية:</strong> التكاليف المتعلقة بإدارة المنشأة ككل وتوفير التمويل (مرتبات الإدارة، أدوات كتابية، فوائد القروض).</li>
-            </ul>
-        </div>
-        <div class="page-footer">الصفحة 3 من 11</div>
-    </div>
-    
-    <!-- PAGE 4 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h2>ثالثاً: التبويب حسب علاقة التكلفة بوحدة المنتج</h2>
-            <p>يعتبر هذا التبويب أساسيًا في نظريات التكاليف، حيث يقسم التكاليف إلى:</p>
-            <div class="definition-box">
-                <h3>1. التكاليف المباشرة (Direct Costs)</h3>
-                <p>هي التكاليف التي يمكن تتبعها وربطها بسهولة ودقة بوحدة منتج معينة. تصرف خصيصًا من أجل هذه الوحدة.
-                <br><strong>أمثلة:</strong> الخشب في صناعة الأثاث، القماش في صناعة الملابس، أجر العامل الذي يقوم بتجميع المنتج.</p>
-            </div>
-            <div class="definition-box">
-                <h3>2. التكاليف غير المباشرة (Indirect Costs)</h3>
-                <p>هي التكاليف التي يصعب ربطها مباشرة بوحدة منتج معينة، حيث أنها تخدم العملية الإنتاجية ككل أو عدة منتجات.
-                <br><strong>أمثلة:</strong> إيجار المصنع، مرتب مدير المصنع، أجور المشرفين، الزيوت والشحوم للآلات، تكاليف الصيانة.</p>
-            </div>
-            
-            <h2>رابعاً: التبويب حسب علاقة التكلفة بحجم النشاط (التبويب السلوكي)</h2>
-            <p>يدرس سلوك التكلفة عند تغير حجم الإنتاج أو المبيعات، وهو أساسي للتخطيط واتخاذ القرارات.</p>
-            <div class="info-box">
-                <h3>1. التكاليف المتغيرة (Variable Costs)</h3>
-                <p><strong>الإجمالي:</strong> يتغير طرديًا وبنفس النسبة مع تغير حجم النشاط. (زاد الإنتاج -> زادت التكلفة الإجمالية).
-                <br><strong>للوحدة:</strong> نصيب الوحدة الواحدة منها يظل ثابتًا مهما تغير حجم النشاط.
-                <br><strong>مثال:</strong> المواد الخام.</p>
-            </div>
-            <div class="info-box">
-                <h3>2. التكاليف الثابتة (Fixed Costs)</h3>
-                <p><strong>الإجمالي:</strong> يظل ثابتًا في مجموعه بغض النظر عن التغير في حجم النشاط (في حدود مدى معين).
-                <br><strong>للوحدة:</strong> نصيب الوحدة الواحدة منها يتغير عكسيًا مع تغير حجم النشاط. (زاد الإنتاج -> قل نصيب الوحدة).
-                <br><strong>مثال:</strong> إيجار المصنع السنوي.</p>
-            </div>
-             <div class="info-box">
-                <h3>3. التكاليف شبه المتغيرة/الثابتة (Mixed Costs)</h3>
-                <p>هي تكاليف تحتوي على جزء ثابت وجزء متغير.
-                <br><strong>مثال:</strong> فاتورة الهاتف (اشتراك شهري ثابت + تكلفة متغيرة حسب المكالمات)، صيانة الآلات (عقد صيانة ثابت + تكاليف قطع غيار متغيرة).</p>
-            </div>
-        </div>
-        <div class="page-footer">الصفحة 4 من 11</div>
-    </div>
+      <input id="patientCode" placeholder="أدخل الكود (مثال: J7K9P2Xy)" class="w-full border rounded-md p-3 mb-3" />
+      <div class="flex gap-2 mb-4">
+        <button id="btnFind" class="px-4 py-2 bg-sky-600 text-white rounded-md">عرض التقرير</button>
+        <button id="btnClear" class="px-4 py-2 border rounded-md">مسح العرض</button>
+      </div>
 
-    <!-- PAGE 5 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h2>تحليل سلوك التكاليف: أمثلة توضيحية</h2>
-            <h3>مثال على التكاليف المتغيرة</h3>
-            <p>مصنع ينتج المنتج (س) الذي يحتاج مادة خام بتكلفة 10 جنيه للوحدة.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>حجم الإنتاج</th>
-                        <th>تكلفة الوحدة (ثابتة)</th>
-                        <th>إجمالي التكاليف المتغيرة (متغير)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1000 وحدة</td>
-                        <td>10 جنيه</td>
-                        <td>10,000 جنيه (1000 × 10)</td>
-                    </tr>
-                    <tr>
-                        <td>2000 وحدة</td>
-                        <td>10 جنيه</td>
-                        <td>20,000 جنيه (2000 × 10)</td>
-                    </tr>
-                    <tr>
-                        <td>3000 وحدة</td>
-                        <td>10 جنيه</td>
-                        <td>30,000 جنيه (3000 × 10)</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="note">
-                <strong>خصائص التكاليف المتغيرة:</strong><br>
-                1. الإجمالي يتغير طرديًا مع حجم النشاط. <br>
-                2. تكلفة الوحدة الواحدة ثابتة.
-            </div>
+      <div id="patientMsg"></div>
+      <div id="patientResult" class="mt-4"></div>
 
-            <h3>مثال على التكاليف الثابتة</h3>
-            <p>مصنع يدفع إيجارًا سنويًا قدره 30,000 جنيه.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>حجم النشاط</th>
-                        <th>إجمالي التكاليف الثابتة (ثابت)</th>
-                        <th>نصيب الوحدة من التكلفة الثابتة (متغير)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1000 وحدة</td>
-                        <td>30,000 جنيه</td>
-                        <td>30 جنيه (30000 / 1000)</td>
-                    </tr>
-                    <tr>
-                        <td>2000 وحدة</td>
-                        <td>30,000 جنيه</td>
-                        <td>15 جنيه (30000 / 2000)</td>
-                    </tr>
-                    <tr>
-                        <td>3000 وحدة</td>
-                        <td>30,000 جنيه</td>
-                        <td>10 جنيه (30000 / 3000)</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="note">
-                <strong>خصائص التكاليف الثابتة:</strong><br>
-                1. الإجمالي ثابت بغض النظر عن حجم النشاط.<br>
-                2. نصيب الوحدة يتغير عكسيًا مع حجم النشاط.
-            </div>
-        </div>
-        <div class="page-footer">الصفحة 5 من 11</div>
-    </div>
+      <div class="mt-6 text-xs text-slate-500">
+        ملاحظة: إذا كان السجل يحتوي ملفاً مضمّناً (embedded) سيظهر مباشرة داخل الصفحة. إن لم يكن، سيعرض رابطًا للمسار المشار إليه.
+      </div>
+    </section>
 
-    <!-- PAGE 6 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
+    <!-- Admin panel (locked) -->
+    <section class="card p-6">
+      <div class="flex justify-between items-start">
+        <div>
+          <h2 class="text-lg font-semibold mb-1">لوحة الأدمن — إدارة وتوليد سجلات مشفّرة</h2>
+          <p class="hint">لوحة محمية: أنشئ كلمة مرور أدمن أول مرة، أو سجّل دخولك بها.</p>
         </div>
-        <div class="page-content">
-            <h2>فصل التكاليف المختلطة: طريقة أعلى وأدنى مستوى نشاط</h2>
-            <p>تستخدم هذه الطريقة لفصل الجزء الثابت عن الجزء المتغير في التكاليف المختلطة، وذلك بتحليل التكاليف عند مستويين مختلفين من النشاط (الأعلى والأدنى).</p>
-            <h3>خطوات الفصل:</h3>
-            
-            <h4>1. حساب معدل التكلفة المتغيرة للوحدة:</h4>
-            <div class="equation-box">
-                معدل التكلفة المتغيرة للوحدة = (تكلفة المستوى الأعلى - تكلفة المستوى الأدنى) / (حجم نشاط المستوى الأعلى - حجم نشاط المستوى الأدنى)
-            </div>
-
-            <h4>2. حساب إجمالي التكاليف المتغيرة عند أي مستوى:</h4>
-            <div class="equation-box">
-                إجمالي التكاليف المتغيرة = حجم النشاط × معدل التكلفة المتغيرة للوحدة
-            </div>
-
-            <h4>3. حساب إجمالي التكاليف الثابتة:</h4>
-            <div class="equation-box">
-                إجمالي التكاليف الثابتة = إجمالي التكلفة عند مستوى معين - إجمالي التكلفة المتغيرة لنفس المستوى
-            </div>
-
-            <h3>مثال تطبيقي:</h3>
-            <p>البيانات التالية تخص إحدى الشركات:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>المستوى</th>
-                        <th>عدد الوحدات المنتجة</th>
-                        <th>إجمالي تكاليف الإنتاج</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>الأدنى</td>
-                        <td>20,000</td>
-                        <td>350,000 جنيه</td>
-                    </tr>
-                    <tr>
-                        <td>الأعلى</td>
-                        <td>40,000</td>
-                        <td>550,000 جنيه</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <h4>الحل:</h4>
-            <p><strong>1. حساب معدل التكلفة المتغيرة للوحدة:</strong><br>
-            = (550,000 - 350,000) / (40,000 - 20,000) = 200,000 / 20,000 = <strong>10 جنيه/للوحدة</strong></p>
-
-            <p><strong>2. حساب الجزء الثابت (باستخدام المستوى الأعلى):</strong><br>
-            إجمالي التكلفة المتغيرة = 40,000 وحدة × 10 جنيه/للوحدة = 400,000 جنيه.<br>
-            إجمالي التكلفة الثابتة = 550,000 (الإجمالي) - 400,000 (المتغير) = <strong>150,000 جنيه</strong></p>
-            
-            <p><strong>(للتأكيد باستخدام المستوى الأدنى):</strong><br>
-            إجمالي التكلفة المتغيرة = 20,000 وحدة × 10 جنيه/للوحدة = 200,000 جنيه.<br>
-            إجمالي التكلفة الثابتة = 350,000 (الإجمالي) - 200,000 (المتغير) = <strong>150,000 جنيه</strong> (نفس النتيجة)</p>
+        <div>
+          <button id="btnAdminLockToggle" class="px-3 py-1 rounded-md border text-sm">فتح/قفل الأدمن</button>
         </div>
-        <div class="page-footer">الصفحة 6 من 11</div>
-    </div>
-    
-    <!-- PAGE 7 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h2>العلاقة المتداخلة بين تبويبات التكاليف (جدول تحليلي)</h2>
-            <p>نفس عنصر التكلفة يمكن تبويبه بأكثر من طريقة حسب الهدف من التبويب.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>عنصر التكلفة</th>
-                        <th>تبويب نوعي</th>
-                        <th>تبويب وظيفي</th>
-                        <th>علاقته بالمنتج</th>
-                        <th>علاقته بالنشاط</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>خشب في صناعة الأثاث</td>
-                        <td>مواد</td>
-                        <td>إنتاجية</td>
-                        <td><strong>مباشرة</strong></td>
-                        <td><strong>متغيرة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>أجور عمال الإنتاج</td>
-                        <td>أجور</td>
-                        <td>إنتاجية</td>
-                        <td><strong>مباشرة</strong></td>
-                        <td><strong>متغيرة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>عمولة رجال البيع</td>
-                        <td>أجور</td>
-                        <td>تسويقية</td>
-                        <td><strong>مباشرة</strong></td>
-                        <td><strong>متغيرة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>وقود وزيوت للآلات</td>
-                        <td>مواد</td>
-                        <td>إنتاجية</td>
-                        <td>غير مباشرة</td>
-                        <td><strong>متغيرة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>مرتب مدير المصنع</td>
-                        <td>أجور</td>
-                        <td>إنتاجية</td>
-                        <td>غير مباشرة</td>
-                        <td><strong>ثابتة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>إهلاك آلات المصنع</td>
-                        <td>خدمات</td>
-                        <td>إنتاجية</td>
-                        <td>غير مباشرة</td>
-                        <td><strong>ثابتة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>إيجار المعرض</td>
-                        <td>خدمات</td>
-                        <td>تسويقية</td>
-                        <td>غير مباشرة</td>
-                        <td><strong>ثابتة</strong></td>
-                    </tr>
-                    <tr>
-                        <td>مرتبات الإدارة</td>
-                        <td>أجور</td>
-                        <td>إدارية</td>
-                        <td>غير مباشرة</td>
-                        <td><strong>ثابتة</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="note">
-                <strong>ملاحظة هامة:</strong> كل التكاليف المباشرة هي بالضرورة تكاليف متغيرة، ولكن ليست كل التكاليف غير المباشرة ثابتة (فقد تكون غير مباشرة متغيرة مثل الوقود، أو غير مباشرة ثابتة مثل الإيجار).
-            </div>
-        </div>
-        <div class="page-footer">الصفحة 7 من 11</div>
-    </div>
-    
-    <!-- PAGE 8 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h1>نظريات تحميل التكاليف</h1>
-            <p>تختلف النظريات في تحديد العناصر التي يجب تحميلها على تكلفة الإنتاج، والعناصر التي تعتبر أعباءً على قائمة الدخل.</p>
-            
-            <h3>1. نظرية التكاليف الإجمالية (الكلية - Absorption Costing)</h3>
-            <p>تحمل الإنتاج بكافة عناصر التكاليف الصناعية سواء كانت مباشرة أو غير مباشرة، متغيرة أو ثابتة.</p>
-            <div class="equation-box">
-                تكلفة الوحدة = (تكاليف صناعية مباشرة + تكاليف صناعية غير مباشرة متغيرة + تكاليف صناعية غير مباشرة ثابتة)
-            </div>
+      </div>
 
-            <h3>2. نظرية التكاليف المتغيرة (Variable Costing)</h3>
-            <p>تحمل الإنتاج فقط بالتكاليف الصناعية المتغيرة (مباشرة وغير مباشرة). أما التكاليف الثابتة (صناعية، تسويقية، إدارية) فتعتبر أعباء فترة وتطرح بالكامل في قائمة الدخل.</p>
-            <div class="equation-box">
-                تكلفة الوحدة = (تكاليف صناعية مباشرة + تكاليف صناعية غير مباشرة متغيرة)
+      <!-- Admin lock / set password -->
+      <div id="adminLockBox" class="mt-4">
+        <div id="adminLockInner" class="space-y-2">
+          <div id="adminSetBox" class="">
+            <label class="block text-sm">إنشاء كلمة مرور للأدمن (محلياً)</label>
+            <input id="adminSetPwd" type="password" class="w-full border rounded-md p-2 mt-1" placeholder="اختر كلمة مرور قوية (تخزن في localStorage فقط)"/>
+            <div class="flex gap-2 mt-2">
+              <button id="btnSetAdmin" class="px-3 py-2 bg-emerald-600 text-white rounded-md">إنشاء وتفعيل</button>
+              <button id="btnRemoveAdmin" class="px-3 py-2 border rounded-md text-red-600">حذف كلمة المرور المحلية</button>
             </div>
+            <p class="hint">إن قمت بحذف كلمة المرور ستحتاج لإعادة إنشائها. لا تُخزّن كلمة المرور الحقيقية هنا.</p>
+          </div>
 
-            <h3>3. نظرية التكاليف المباشرة (Direct Costing)</h3>
-            <p>تحمل الإنتاج بالتكاليف المباشرة فقط (مواد مباشرة وأجور مباشرة). أما باقي التكاليف (غير المباشرة والثابتة) فتعتبر أعباء فترة.</p>
-            <div class="equation-box">
-                تكلفة الوحدة = (تكاليف صناعية مباشرة فقط)
+          <div id="adminLoginBox" class="hidden">
+            <label class="block text-sm">تسجيل الدخول للأدمن</label>
+            <input id="adminPwd" type="password" class="w-full border rounded-md p-2 mt-1" placeholder="أدخل كلمة المرور"/>
+            <div class="flex gap-2 mt-2">
+              <button id="btnAdminLogin" class="px-3 py-2 bg-sky-600 text-white rounded-md">دخول</button>
             </div>
+            <p id="adminStatus" class="mt-2 text-sm text-slate-500"></p>
+          </div>
+        </div>
+      </div>
 
-            <h3>4. نظرية تكاليف الطاقة المستغلة (Exploited Capacity)</h3>
-            <p>تحمل الإنتاج بكافة التكاليف المتغيرة بالإضافة إلى الجزء "المستغل" فقط من التكاليف الثابتة. الجزء غير المستغل من التكاليف الثابتة يعتبر خسارة (عبء) ويُرحل لقائمة الدخل.</p>
-            <div class="equation-box">
-                تكلفة الوحدة = (تكاليف متغيرة + جزء من التكاليف الثابتة المستغلة)
-            </div>
-            
-            <h3>مثال مبسط لتكلفة الوحدة حسب النظريات الأربع:</h3>
-            <p><strong>بيانات الوحدة:</strong> مواد مباشرة 100ج، أجور مباشرة 40ج، تكاليف صناعية غير مباشرة متغيرة 1ج، تكاليف صناعية ثابتة للوحدة 4ج (بنسبة استغلال 50%).</p>
-            <ul>
-                <li><strong>التكاليف الإجمالية:</strong> 100 + 40 + 1 + 4 = <strong>145 جنيه</strong>.</li>
-                <li><strong>التكاليف المتغيرة:</strong> 100 + 40 + 1 = <strong>141 جنيه</strong>.</li>
-                <li><strong>التكاليف المباشرة:</strong> 100 + 40 = <strong>140 جنيه</strong>.</li>
-                <li><strong>التكاليف المستغلة:</strong> (100+40+1) + (4 × 50%) = 141 + 2 = <strong>143 جنيه</strong>.</li>
-            </ul>
+      <!-- Admin tools (hidden until unlocked) -->
+      <div id="adminPanel" class="mt-4 hidden">
+        <hr class="my-3"/>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input id="adminCode" class="border rounded-md p-2" placeholder="كود (اتركه ليتولّد تلقائياً)"/>
+          <input id="adminDate" type="date" class="border rounded-md p-2" />
+          <input id="adminName" class="border rounded-md p-2" placeholder="اسم المريض" />
+          <select id="expirySelect" class="border rounded-md p-2">
+            <option value="">بدون انتهاء</option>
+            <option value="30">تنتهي بعد 30 يوم</option>
+            <option value="365">تنتهي بعد سنة</option>
+          </select>
         </div>
-        <div class="page-footer">الصفحة 8 من 11</div>
-    </div>
-    
-    <!-- PAGE 9 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h1>قوائم التكاليف والدخل</h1>
-            <p>تختلف بنية القوائم حسب النظرية المطبقة.</p>
-            
-            <h2>قائمة التكاليف وقائمة الدخل (وفقًا لنظرية التكاليف الإجمالية)</h2>
-            <div style="display: flex; gap: 20px;">
-                <div style="flex: 1;">
-                    <h3>قائمة التكاليف الصناعية</h3>
-                    <table>
-                      <tr><td>مواد مباشرة + أجور مباشرة + خدمات مباشرة</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= التكلفة الأولية</td></tr>
-                      <tr><td>(+) تكاليف صناعية غير مباشرة (متغيرة + ثابتة)</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= تكلفة الإنتاج خلال الفترة</td></tr>
-                      <tr><td>(+) ت. إنتاج تحت التشغيل أول الفترة</td></tr>
-                      <tr><td>(-) ت. إنتاج تحت التشغيل آخر الفترة</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= تكلفة الإنتاج التام خلال الفترة</td></tr>
-                    </table>
-                </div>
-                <div style="flex: 1;">
-                    <h3>قائمة الدخل</h3>
-                    <table>
-                      <tr><td>إيراد المبيعات</td></tr>
-                      <tr><td>(-) تكلفة المبيعات (صناعية + تسويقية)</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= مجمل الربح</td></tr>
-                      <tr><td>(-) تكاليف إدارية وتمويلية</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= صافي الربح</td></tr>
-                    </table>
-                </div>
-            </div>
 
-            <h2>قائمة التكاليف وقائمة الدخل (وفقًا لنظرية التكاليف المتغيرة)</h2>
-             <div style="display: flex; gap: 20px;">
-                <div style="flex: 1;">
-                    <h3>قائمة التكاليف الصناعية</h3>
-                    <table>
-                      <tr><td>مواد مباشرة + أجور مباشرة + خدمات مباشرة</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= التكلفة الأولية</td></tr>
-                      <tr><td>(+) تكاليف صناعية غير مباشرة (متغيرة فقط)</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= تكلفة الإنتاج خلال الفترة</td></tr>
-                    </table>
-                </div>
-                <div style="flex: 1;">
-                    <h3>قائمة الدخل</h3>
-                    <table>
-                      <tr><td>إيراد المبيعات</td></tr>
-                      <tr><td>(-) تكلفة المبيعات المتغيرة (صناعية + تسويقية)</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= الربح الحدي (هامش المساهمة)</td></tr>
-                      <tr><td>(-) إجمالي التكاليف الثابتة (صناعية، تسويقية، إدارية)</td></tr>
-                      <tr><td style="font-weight: bold; background-color: #eee;">= صافي الربح</td></tr>
-                    </table>
-                </div>
-            </div>
-            <div class="note">
-            <strong>ملاحظة:</strong> قائمة الدخل في النظرية المتغيرة تطرح كل التكاليف المتغيرة أولاً للوصول إلى "الربح الحدي"، ثم تطرح كل التكاليف الثابتة ككتلة واحدة للوصول إلى صافي الربح. هذا الهيكل مفيد جدًا في تحليل "نقطة التعادل".
-            </div>
+        <div class="mt-3">
+          <textarea id="adminSummary" rows="4" class="w-full border rounded-md p-2" placeholder="ملخص التقرير (اختياري)"></textarea>
         </div>
-        <div class="page-footer">الصفحة 9 من 11</div>
-    </div>
-    
-    <!-- PAGE 10 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
-        </div>
-        <div class="page-content">
-            <h1>طرق تسعير المواد المنصرفة من المخازن</h1>
-            <p>عندما تختلف أسعار شراء المواد، يجب اتباع سياسة محددة لتسعير المواد المنصرفة للإنتاج، مما يؤثر على تكلفة الإنتاج وقيمة المخزون المتبقي.</p>
 
-            <h2>أولاً: طريقة الوارد أولاً يصرف أولاً (FIFO - First-In, First-Out)</h2>
-            <div class="definition-box">
-                <p><strong>المبدأ:</strong> يتم تسعير المواد المنصرفة للإنتاج بسعر <strong>أقدم</strong> كمية موجودة في المخزن حتى تنفد، ثم يتم التسعير بسعر الكمية التي تليها وهكذا.
-                <br><strong>التأثير:</strong>
-                <br>- <strong>تكلفة الإنتاج:</strong> تُسعر بالأسعار القديمة (الأرخص في فترات التضخم).
-                <br>- <strong>المخزون آخر المدة:</strong> يُقيّم بأحدث الأسعار، مما يجعله قريبًا من القيمة السوقية الحالية (مركز مالي سليم).
-                <br><strong>المناسبة:</strong> تلائم فترات انخفاض الأسعار.</p>
-            </div>
-
-            <h2>ثانياً: طريقة الوارد أخيراً يصرف أولاً (LIFO - Last-In, First-Out)</h2>
-            <div class="definition-box">
-                <p><strong>المبدأ:</strong> يتم تسعير المواد المنصرفة للإنتاج بسعر <strong>أحدث</strong> كمية تم شراؤها.
-                <br><strong>التأثير:</strong>
-                <br>- <strong>تكلفة الإنتاج:</strong> تُسعر بأحدث الأسعار، مما يتماشى مع تكاليف الإحلال الحالية ويساعد على تحديد أسعار بيع سليمة.
-                <br>- <strong>المخزون آخر المدة:</strong> يُقيّم بالأسعار القديمة، مما يجعله بعيدًا عن القيمة السوقية (مركز مالي غير واقعي).
-                <br><strong>المناسبة:</strong> تلائم فترات ارتفاع الأسعار (التضخم).</p>
-            </div>
-            <div class="note">
-                <strong>ملاحظة:</strong> طريقة LIFO غير مسموح بها في العديد من المعايير المحاسبية الدولية (IFRS) لأنها قد تؤدي إلى تشويه قيمة المخزون في الميزانية العمومية.
-            </div>
+        <div class="mt-3">
+          <label class="block text-sm mb-1">ملف التقرير (اختياري: PDF/صورة)</label>
+          <input id="adminFile" type="file" accept=".pdf,image/*" class="w-full" />
+          <div class="flex items-center gap-2 mt-2">
+            <input id="embedCheckbox" type="checkbox" checked />
+            <label for="embedCheckbox" class="text-sm text-slate-500">تضمين الملف داخل التشفير (مناسب لرفع ثابت)</label>
+          </div>
         </div>
-        <div class="page-footer">الصفحة 10 من 11</div>
-    </div>
 
-    <!-- PAGE 11 -->
-    <div class="page">
-        <div class="page-header">
-            <h2 class="header-title">Third grade</h2>
-            <span class="header-subtitle">⚜️ إعداد: Mr.Elsayed Abdelazim ⚜️</span>
+        <div class="mt-4 flex gap-2">
+          <button id="btnGen" class="px-4 py-2 bg-green-600 text-white rounded-md">Encrypt & Generate</button>
+          <button id="btnDownloadJson" class="px-4 py-2 border rounded-md">Encrypt + Download data.json</button>
+          <button id="btnImport" class="px-4 py-2 border rounded-md">استيراد data.json موجود</button>
+          <input id="fileImport" type="file" accept=".json" class="hidden" />
         </div>
-        <div class="page-content">
-            <h2>ثالثاً: طريقة المتوسط المرجح (المتحرك) (Weighted Average)</h2>
-            <div class="definition-box">
-                <p><strong>المبدأ:</strong> يتم حساب سعر متوسط جديد للمخزون <strong>بعد كل عملية شراء (ورود)</strong>. جميع المواد المنصرفة بعد ذلك تسعر بهذا المتوسط الجديد حتى ورود شحنة جديدة.
-                <br><strong>المزايا:</strong> تقلل من أثر تقلبات الأسعار الحادة على تكلفة الإنتاج وقيمة المخزون. تعتبر حلاً وسطًا بين FIFO و LIFO.
-                <br><strong>العيوب:</strong> تتطلب عمليات حسابية كثيرة ومستمرة.</p>
-            </div>
-            <h3>كيفية حساب المتوسط المرجح:</h3>
-            <div class="equation-box">
-                سعر المتوسط المرجح = (قيمة الرصيد الحالي + قيمة الوارد الجديد) / (كمية الرصيد الحالي + كمية الوارد الجديد)
-            </div>
-            <h3>مثال:</h3>
-            <p>الرصيد 500 وحدة بسعر 10 جنيه للوحدة. ورد للمخازن 200 وحدة بسعر 15 جنيه للوحدة.</p>
-            <p>
-                قيمة الرصيد = 500 × 10 = 5000 جنيه.<br>
-                قيمة الوارد = 200 × 15 = 3000 جنيه.<br>
-                <strong>إجمالي القيمة = 5000 + 3000 = 8000 جنيه.</strong><br>
-                <strong>إجمالي الكمية = 500 + 200 = 700 وحدة.</strong><br>
-                المتوسط المرجح الجديد = 8000 / 700 = <strong>11.43 جنيه للوحدة (تقريبًا)</strong>.
-            </p>
-            <p>أي كمية تصرف بعد ذلك ستُسعر بـ 11.43 جنيه حتى ورود دفعة جديدة.</p>
 
-            <h2>جرد المواد والرقابة على المخزون</h2>
-            <p>تتم الرقابة على المخزون بمقارنة الرصيد الدفتري (المسجل في بطاقات الصنف) بالرصيد الفعلي (الناتج عن العد الفعلي للمواد في المخازن).</p>
-            <h3>معالجة فروق الجرد:</h3>
-            <ul>
-                <li><strong>عجز (الفعلي < الدفتري):</strong>
-                    <ul>
-                        <li><strong>عجز طبيعي (مسموح به):</strong> بسبب طبيعة المادة (تبخر، جفاف). يعتبر جزءًا من تكاليف الإنتاج ويحمل على التكاليف الصناعية غير المباشرة.</li>
-                        <li><strong>عجز غير طبيعي (غير مسموح به):</strong> بسبب إهمال، سرقة، أو سوء تخزين. يعتبر خسارة ويقفل في حساب الأرباح والخسائر.</li>
-                    </ul>
-                </li>
-                <li><strong>زيادة (الفعلي > الدفتري):</strong>
-                    <ul>
-                       <li>تضاف الكمية الزائدة للرصيد الدفتري، وتُبحث أسبابها (قد تكون خطأ في تسجيل المنصرف أو خطأ في العد).</li>
-                    </ul>
-                </li>
-            </ul>
+        <div id="adminResult" class="mt-4"></div>
+
+        <div class="mt-3">
+          <h3 class="text-sm font-medium">معاينة السجل المشفَّر</h3>
+          <pre id="recordPreview" class="code"></pre>
         </div>
-        <div class="page-footer">الصفحة 11 من 11</div>
-    </div>
+
+        <div class="mt-3 flex gap-4 items-start">
+          <canvas id="qrCanvas" width="120" height="120" class="border rounded-md"></canvas>
+          <div id="embedPreview"></div>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="text-sm font-medium">دمج/تحميل</h3>
+          <p class="hint">عند تنزيل ملف data.json سيكون مزيجاً لما في الذاكرة + السجل الجديد. يمكنك دمجه على الريبو.</p>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <footer class="mt-6 text-sm text-slate-500 text-center">
+    تحذير: هذا حل ثابت وآمن نسبياً. للحماية المطلقة استخدم backend مؤمَّن و repo خاص أو سحابة خاصة.
+  </footer>
+</div>
+
+<script>
+/* ---------------------------
+   إعدادات التشفير والمساعدة
+   ---------------------------
+   - السجلات مشفّرة per-record باستخدام AES-GCM
+   - المفتاح مشتق من الكود بواسطة PBKDF2 (iterations = 200000)
+   - صيغة كل سجل في data.json:
+     {
+       "code_hint": "AB***",
+       "salt": "...", "iv": "...", "ciphertext":"...",
+       "report_url": "...", "expires_at": "2026-04-01" // optional
+     }
+   - ملفات مضمنة تُخزَّن كـ payload.file_embedded = {filename, data_base64}
+   --------------------------- */
+
+const ITERATIONS = 200000;
+
+// utils
+function randStr(len=12){
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let s=''; for(let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)]; return s;
+}
+function ab2b64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function b642ab(b64){ return Uint8Array.from(atob(b64), c=>c.charCodeAt(0)); }
+function show(el, yes=true){ el.classList.toggle('hidden', !yes); }
+function nowISO(){ return new Date().toISOString(); }
+
+// derive PBKDF2 key (Web Crypto)
+async function deriveKey(code, saltB64){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey']);
+  const salt = b642ab(saltB64);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations: ITERATIONS, hash:'SHA-256'}, baseKey, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+
+async function encryptPayload(code, payloadObj){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey(code, ab2b64(salt));
+  const enc = new TextEncoder();
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(JSON.stringify(payloadObj)));
+  return { salt: ab2b64(salt), iv: ab2b64(iv), ciphertext: ab2b64(ct) };
+}
+
+async function decryptRecord(code, rec){
+  const key = await deriveKey(code, rec.salt);
+  const iv = b642ab(rec.iv);
+  const ct = b642ab(rec.ciphertext);
+  const plain = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
+  const dec = new TextDecoder();
+  return JSON.parse(dec.decode(plain));
+}
+
+/* ---------------------------
+   Admin password (localStorage)
+   - تخزين hash لكلمة المرور في localStorage (ليس على الخادم)
+   - عند أول إعداد: أنشئ كلمة مرور جديدة
+   - للتحقق: نقارن digest SHA-256
+   --------------------------- */
+const ADMINKEY = 'rv_admin_hash';
+
+async function sha256b64(s){
+  const enc = new TextEncoder();
+  const h = await crypto.subtle.digest('SHA-256', enc.encode(s));
+  return ab2b64(h);
+}
+
+async function setAdminPassword(pwd){
+  const h = await sha256b64(pwd + '::rv_salt_v1'); // salt ثابت محلي
+  localStorage.setItem(ADMINKEY, h);
+}
+function removeAdminPassword(){
+  localStorage.removeItem(ADMINKEY);
+}
+function hasAdminPassword(){ return !!localStorage.getItem(ADMINKEY); }
+async function verifyAdminPassword(pwd){
+  const stored = localStorage.getItem(ADMINKEY);
+  if(!stored) return false;
+  const h = await sha256b64(pwd + '::rv_salt_v1');
+  return (h === stored);
+}
+
+/* ---------------------------
+   DOM references
+   --------------------------- */
+const btnAdminLockToggle = document.getElementById('btnAdminLockToggle');
+const adminSetBox = document.getElementById('adminSetBox');
+const adminLoginBox = document.getElementById('adminLoginBox');
+const adminPanel = document.getElementById('adminPanel');
+const btnSetAdmin = document.getElementById('btnSetAdmin');
+const btnRemoveAdmin = document.getElementById('btnRemoveAdmin');
+const btnAdminLogin = document.getElementById('btnAdminLogin');
+const adminPwd = document.getElementById('adminPwd');
+const adminSetPwd = document.getElementById('adminSetPwd');
+const adminStatus = document.getElementById('adminStatus');
+const btnGen = document.getElementById('btnGen');
+const btnDownloadJson = document.getElementById('btnDownloadJson');
+const btnImport = document.getElementById('btnImport');
+const fileImport = document.getElementById('fileImport');
+const recordPreview = document.getElementById('recordPreview');
+const adminResult = document.getElementById('adminResult');
+const qrCanvas = document.getElementById('qrCanvas');
+const embedPreview = document.getElementById('embedPreview');
+
+const btnFind = document.getElementById('btnFind');
+const btnClear = document.getElementById('btnClear');
+const patientCode = document.getElementById('patientCode');
+const patientMsg = document.getElementById('patientMsg');
+const patientResult = document.getElementById('patientResult');
+
+/* ---------------------------
+   Admin lock / unlock logic
+   --------------------------- */
+function refreshAdminUI(){
+  if(!hasAdminPassword()){
+    // no password set -> show set box
+    adminSetBox.style.display = 'block';
+    adminLoginBox.style.display = 'none';
+    adminPanel.classList.add('hidden');
+  } else {
+    // password exists -> show login
+    adminSetBox.style.display = 'none';
+    adminLoginBox.style.display = 'block';
+    adminPanel.classList.add('hidden');
+  }
+}
+refreshAdminUI();
+
+btnAdminLockToggle.addEventListener('click', ()=>{
+  // toggle visibility of admin area
+  const el = document.getElementById('adminLockBox');
+  el.classList.toggle('hidden');
+});
+
+btnSetAdmin.addEventListener('click', async ()=>{
+  const pwd = adminSetPwd.value.trim();
+  if(!pwd || pwd.length < 6){ alert('اختر كلمة مرور قوية لا تقل 6 حروف'); return; }
+  await setAdminPassword(pwd);
+  adminSetPwd.value='';
+  alert('تم إنشاء كلمة مرور الأدمن (محلياً). احتفظ بها.');
+  refreshAdminUI();
+});
+
+btnRemoveAdmin.addEventListener('click', ()=>{
+  if(confirm('هل تريد حذف كلمة مرور الأدمن المحفوظة محلياً؟ هذا سيجعلك تحتاج لإعادة إنشائها.')) {
+    removeAdminPassword(); refreshAdminUI(); alert('تم الحذف');
+  }
+});
+
+btnAdminLogin.addEventListener('click', async ()=>{
+  const pwd = adminPwd.value.trim();
+  if(!pwd){ adminStatus.textContent='ادخل كلمة المرور'; return; }
+  const ok = await verifyAdminPassword(pwd);
+  if(ok){
+    adminPwd.value=''; adminStatus.textContent='تم تسجيل الدخول';
+    adminPanel.classList.remove('hidden');
+    document.getElementById('adminLockBox').classList.add('hidden'); // hide lock box
+  } else {
+    adminStatus.textContent='كلمة المرور غير صحيحة';
+  }
+});
+
+/* ---------------------------
+   Admin features: generate record
+   --------------------------- */
+async function fileToBase64(file){
+  return new Promise((res, rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+async function handleGenerate({download=false}){
+  adminResult.innerHTML=''; recordPreview.textContent=''; embedPreview.innerHTML='';
+  const codeInput = document.getElementById('adminCode').value.trim();
+  const code = codeInput || randStr(10);
+  const name = document.getElementById('adminName').value.trim();
+  const date = document.getElementById('adminDate').value;
+  const summary = document.getElementById('adminSummary').value.trim();
+  const file = document.getElementById('adminFile').files[0];
+  const embed = document.getElementById('embedCheckbox').checked;
+  const expirySel = document.getElementById('expirySelect').value;
+
+  // build payload
+  const payload = { patient_name: name || '', exam_date: date || '', summary: summary || '', created_at: nowISO() };
+  if(expirySel){
+    const days = parseInt(expirySel,10);
+    const expDate = new Date(); expDate.setDate(expDate.getDate() + days);
+    payload.expires_at = expDate.toISOString().slice(0,10);
+  }
+
+  if(file && embed){
+    const b64 = await fileToBase64(file);
+    payload.file_embedded = { filename: file.name, data_base64: b64 };
+    payload.report_url = null;
+  } else if(file){
+    payload.report_url = `reports/${code}-${file.name.replace(/\s+/g,'_')}`;
+  } else {
+    payload.report_url = null;
+  }
+
+  try {
+    const rec = await encryptPayload(code, payload);
+    const record = { code_hint: code.slice(0,2) + '***', salt: rec.salt, iv: rec.iv, ciphertext: rec.ciphertext, report_url: payload.report_url, expires_at: payload.expires_at || null };
+    recordPreview.textContent = JSON.stringify(record, null, 2);
+    adminResult.innerHTML = `<div class="text-sm text-green-600">تم إنشاء السجل. الكود: <strong>${code}</strong></div>`;
+    // QR
+    new QRious({ element: qrCanvas, value: code, size:120, level:'H' });
+
+    // show embedded preview if exist
+    if(payload.file_embedded){
+      const mime = payload.file_embedded.filename.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/*';
+      const dataUrl = `data:${mime};base64,${payload.file_embedded.data_base64}`;
+      if(mime==='application/pdf'){
+        embedPreview.innerHTML = `<div class="text-sm">معاينة PDF مضمّن</div><iframe src="${dataUrl}" class="w-full h-48 border rounded-md mt-2"></iframe>`;
+      } else {
+        embedPreview.innerHTML = `<div class="text-sm">معاينة صورة مضمّنة</div><img src="${dataUrl}" class="w-full rounded-md mt-2" />`;
+      }
+    } else if(payload.report_url){
+      embedPreview.innerHTML = `<div class="text-sm text-slate-500">ملف مرجع: <code>${payload.report_url}</code></div>`;
+    } else embedPreview.innerHTML='';
+
+    // download
+    if(download){
+      const wrapper = { reports: [record] };
+      const blob = new Blob([JSON.stringify(wrapper, null, 2)], { type:'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `data-${code}.json`; a.click();
+      URL.revokeObjectURL(url);
+      adminResult.innerHTML += `<div class="text-sm text-green-600 mt-2">تم تنزيل ملف data-${code}.json</div>`;
+    }
+
+  } catch(e){
+    console.error(e);
+    adminResult.innerHTML = `<div class="text-sm text-red-600">حدث خطأ أثناء التشفير</div>`;
+  }
+}
+
+btnGen.addEventListener('click', ()=> handleGenerate({download:false}));
+btnDownloadJson.addEventListener('click', ()=> handleGenerate({download:true}));
+
+/* ---------------------------
+   Import existing data.json (merge)
+   --------------------------- */
+btnImport.addEventListener('click', ()=> fileImport.click());
+fileImport.addEventListener('change', async (ev)=>{
+  const f = ev.target.files[0]; if(!f) return;
+  try {
+    const text = await f.text();
+    const obj = JSON.parse(text);
+    // simple validation
+    if(!Array.isArray(obj.reports)) { alert('الملف غير مطابق: يجب أن يحتوي على مفتاح "reports" كمصفوفة'); return; }
+    // download merged file: try to fetch existing data.json (if present)
+    let existing = { reports: [] };
+    try {
+      const res = await fetch('data.json',{cache:'no-store'});
+      if(res.ok){ existing = await res.json(); if(!Array.isArray(existing.reports)) existing = { reports: [] }; }
+    } catch(e){}
+    const merged = { reports: [ ...existing.reports, ...obj.reports ] };
+    const blob = new Blob([JSON.stringify(merged,null,2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download = 'data-merged.json'; a.click();
+    URL.revokeObjectURL(url);
+    adminResult.innerHTML = `<div class="text-sm text-green-600">تم إنشاء ملف data-merged.json للتحميل — ارفع الملف إلى repo.</div>`;
+  } catch(e){ console.error(e); alert('خطأ في قراءة الملف'); }
+});
+
+/* ---------------------------
+   Patient flow: search & decrypt
+   --------------------------- */
+function setPatientMsg(html, color='slate'){
+  patientMsg.innerHTML = `<div class="p-2 text-sm text-${color}-600">${html}</div>`;
+  setTimeout(()=>{ if(patientMsg) patientMsg.innerHTML=''; }, 6000);
+}
+btnFind.addEventListener('click', async ()=>{
+  const code = patientCode.value.trim();
+  patientResult.innerHTML=''; if(!code){ setPatientMsg('ادخل الكود أولاً','red'); return; }
+  setPatientMsg('جاري البحث وفك التشفير...','slate');
+  try {
+    const res = await fetch('data.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('لا يوجد data.json');
+    const db = await res.json();
+    let ok=false;
+    for(const rec of db.reports){
+      // check expiry if present
+      if(rec.expires_at){
+        const today = new Date().toISOString().slice(0,10);
+        if(rec.expires_at < today) continue; // expired
+      }
+      try {
+        const plain = await decryptRecord(code, rec);
+        ok=true;
+        // display
+        let html = `<div class="p-4 border rounded-md"><h3 class="font-semibold">تفاصيل التقرير</h3>`;
+        html += `<div class="text-sm text-slate-600">المريض: ${plain.patient_name||'-'} • التاريخ: ${plain.exam_date||'-'}</div>`;
+        html += `<div class="mt-3"><strong>الملخص</strong><pre class="whitespace-pre-wrap bg-slate-50 p-3 rounded-md">${plain.summary||'-'}</pre></div>`;
+        if(plain.file_embedded){
+          const b64 = plain.file_embedded.data_base64;
+          const fname = plain.file_embedded.filename || 'file';
+          if(fname.toLowerCase().endsWith('.pdf')){
+            html += `<div class="mt-3"><iframe src="data:application/pdf;base64,${b64}" class="w-full h-72 border rounded-md"></iframe></div>`;
+          } else {
+            html += `<div class="mt-3"><img src="data:image/*;base64,${b64}" class="w-full rounded-md" /></div>`;
+          }
+        } else if(rec.report_url){
+          html += `<div class="mt-3 text-sm text-slate-500">ملف مرجع: <a href="${rec.report_url}" target="_blank" class="text-sky-600">${rec.report_url}</a></div>`;
+        }
+        html += `</div>`;
+        patientResult.innerHTML = html;
+        setPatientMsg('تم فك التشفير بنجاح','green');
+        break;
+      } catch(e){
+        // key wrong for this record — try next
+      }
+    }
+    if(!ok) setPatientMsg('الكود غير صحيح أو لا توجد بيانات مطابقة','red');
+  } catch(e){
+    console.error(e);
+    setPatientMsg('خطأ في تحميل data.json أو التنسيق','red');
+  }
+});
+
+btnClear.addEventListener('click', ()=>{ patientCode.value=''; patientResult.innerHTML=''; patientMsg.innerHTML=''; });
+
+/* ---------------------------
+   init: hide panels based on state
+   --------------------------- */
+(function init(){
+  // If admin password exists show login box; else show set password box
+  refreshAdminUI();
+  // hide admin area initially
+  document.getElementById('adminLockBox').classList.remove('hidden');
+})();
+</script>
 
 </body>
 </html>
