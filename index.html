@@ -1,20 +1,21 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Radiology Vault — تقارير الأشعة (احترافي)</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Radiology Vault — احترافي (Patient + Admin)</title>
 
-<!-- Tailwind (CDN) -->
+<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- QR library -->
+<!-- QR small lib -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 <style>
-  body { font-family: Tahoma, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#f8fafc,#ffffff); }
-  .card { background: rgba(255,255,255,0.95); box-shadow: 0 8px 30px rgba(2,6,23,0.06); border-radius: 12px; }
+  body { font-family: Tahoma, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#f8fafc,#fff); }
+  .card { background: rgba(255,255,255,0.96); box-shadow: 0 8px 30px rgba(2,6,23,0.06); border-radius: 12px; }
   pre.code { background:#0b1220;color:#e6eef8;padding:12px;border-radius:8px; max-height:320px; overflow:auto; font-size:12px; }
-  .hint{ color:#6b7280; font-size:0.9rem; }
+  .muted { color:#6b7280; }
+  .tiny { font-size:0.85rem; color:#6b7280; }
 </style>
 </head>
 <body class="p-6">
@@ -23,76 +24,53 @@
   <header class="flex items-center justify-between mb-6">
     <div>
       <h1 class="text-2xl font-extrabold text-sky-600">Radiology Vault</h1>
-      <p class="text-sm text-slate-500">عرض تقارير الأشعة — Static + Client-side Encryption (AES-GCM, PBKDF2)</p>
+      <p class="tiny">عرض تقارير الأشعة — واجهة مريض + لوحة أدمن متقدّمة</p>
     </div>
-    <div class="text-sm text-slate-400">نُسخة آمنة للـ GitHub Pages — أمان محلي</div>
+    <div class="tiny text-slate-400">Static + Client-side Encryption · GitHub-friendly</div>
   </header>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <!-- Patient panel -->
+    <!-- Patient -->
     <section class="card p-6">
       <h2 class="text-lg font-semibold mb-2">بحث المريض</h2>
-      <p class="hint mb-3">أدخل الكود الذي استلمته (أو امسحه برمز QR خارجي)</p>
+      <p class="muted mb-3">أدخل الكود أو الرقم التسلسلي لتظهر لك النتيجة (التقارير مشفّرة إن وُجدت).</p>
 
-      <input id="patientCode" placeholder="أدخل الكود (مثال: J7K9P2Xy)" class="w-full border rounded-md p-3 mb-3" />
-      <div class="flex gap-2 mb-4">
-        <button id="btnFind" class="px-4 py-2 bg-sky-600 text-white rounded-md">عرض التقرير</button>
-        <button id="btnClear" class="px-4 py-2 border rounded-md">مسح العرض</button>
+      <div class="flex gap-2 mb-3">
+        <input id="patientInput" class="flex-1 border rounded-md p-3" placeholder="مثال: AB12CD34" />
+        <button id="btnSearch" class="px-4 py-2 bg-sky-600 text-white rounded-md">عرض</button>
       </div>
 
-      <div id="patientMsg"></div>
-      <div id="patientResult" class="mt-4"></div>
-
-      <div class="mt-6 text-xs text-slate-500">
-        ملاحظة: إذا كان السجل يحتوي ملفاً مضمّناً (embedded) سيظهر مباشرة داخل الصفحة. إن لم يكن، سيعرض رابطًا للمسار المشار إليه.
-      </div>
+      <div id="patientStatus" class="mb-3 tiny"></div>
+      <div id="patientResult"></div>
+      <div class="mt-4 tiny muted">إذا كان التقرير يحتوي ملفًا مضمّنًا فسيفتَح داخل الصفحة؛ وإلا سيعرض رابط التحميل حسب المسار في `report_url`.</div>
     </section>
 
-    <!-- Admin panel (locked) -->
+    <!-- Admin -->
     <section class="card p-6">
-      <div class="flex justify-between items-start">
-        <div>
-          <h2 class="text-lg font-semibold mb-1">لوحة الأدمن — إدارة وتوليد سجلات مشفّرة</h2>
-          <p class="hint">لوحة محمية: أنشئ كلمة مرور أدمن أول مرة، أو سجّل دخولك بها.</p>
-        </div>
-        <div>
-          <button id="btnAdminLockToggle" class="px-3 py-1 rounded-md border text-sm">فتح/قفل الأدمن</button>
-        </div>
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold">لوحة الأدمن</h2>
+        <button id="btnToggleAdmin" class="px-3 py-1 border rounded-md tiny">فتح/قفل الأدمن</button>
       </div>
 
-      <!-- Admin lock / set password -->
-      <div id="adminLockBox" class="mt-4">
-        <div id="adminLockInner" class="space-y-2">
-          <div id="adminSetBox" class="">
-            <label class="block text-sm">إنشاء كلمة مرور للأدمن (محلياً)</label>
-            <input id="adminSetPwd" type="password" class="w-full border rounded-md p-2 mt-1" placeholder="اختر كلمة مرور قوية (تخزن في localStorage فقط)"/>
-            <div class="flex gap-2 mt-2">
-              <button id="btnSetAdmin" class="px-3 py-2 bg-emerald-600 text-white rounded-md">إنشاء وتفعيل</button>
-              <button id="btnRemoveAdmin" class="px-3 py-2 border rounded-md text-red-600">حذف كلمة المرور المحلية</button>
-            </div>
-            <p class="hint">إن قمت بحذف كلمة المرور ستحتاج لإعادة إنشائها. لا تُخزّن كلمة المرور الحقيقية هنا.</p>
-          </div>
+      <div id="adminBox" class="mt-4 hidden">
 
-          <div id="adminLoginBox" class="hidden">
-            <label class="block text-sm">تسجيل الدخول للأدمن</label>
-            <input id="adminPwd" type="password" class="w-full border rounded-md p-2 mt-1" placeholder="أدخل كلمة المرور"/>
-            <div class="flex gap-2 mt-2">
-              <button id="btnAdminLogin" class="px-3 py-2 bg-sky-600 text-white rounded-md">دخول</button>
-            </div>
-            <p id="adminStatus" class="mt-2 text-sm text-slate-500"></p>
-          </div>
+        <!-- GitHub connection -->
+        <div class="mb-3 p-3 border rounded-md">
+          <div class="tiny mb-2">اتصال GitHub (اختياري للنشر المباشر إلى repo)</div>
+          <input id="ghOwner" class="w-full mb-2 border rounded p-2" placeholder="GitHub owner (username or org)" />
+          <input id="ghRepo" class="w-full mb-2 border rounded p-2" placeholder="Repo name" />
+          <input id="ghPath" class="w-full mb-2 border rounded p-2" placeholder="Path to data.json (مثال: data.json)" value="data.json" />
+          <input id="ghToken" type="password" class="w-full mb-2 border rounded p-2" placeholder="Personal Access Token (PAT) — سيبقى في هذه الجلسة فقط" />
+          <div class="tiny muted">ملاحظة: استخدم repo خاص للبيانات الحقيقية. منح PAT فقط صلاحية repo المحتوى.</div>
         </div>
-      </div>
 
-      <!-- Admin tools (hidden until unlocked) -->
-      <div id="adminPanel" class="mt-4 hidden">
-        <hr class="my-3"/>
+        <!-- create/edit record -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input id="adminCode" class="border rounded-md p-2" placeholder="كود (اتركه ليتولّد تلقائياً)"/>
-          <input id="adminDate" type="date" class="border rounded-md p-2" />
-          <input id="adminName" class="border rounded-md p-2" placeholder="اسم المريض" />
-          <select id="expirySelect" class="border rounded-md p-2">
+          <input id="recCode" class="border rounded p-2" placeholder="كود (اتركه لتوليد تلقائي)" />
+          <input id="recDate" type="date" class="border rounded p-2" />
+          <input id="recName" class="border rounded p-2" placeholder="اسم المريض" />
+          <select id="recExpiry" class="border rounded p-2">
             <option value="">بدون انتهاء</option>
             <option value="30">تنتهي بعد 30 يوم</option>
             <option value="365">تنتهي بعد سنة</option>
@@ -100,217 +78,263 @@
         </div>
 
         <div class="mt-3">
-          <textarea id="adminSummary" rows="4" class="w-full border rounded-md p-2" placeholder="ملخص التقرير (اختياري)"></textarea>
+          <textarea id="recSummary" rows="4" class="w-full border rounded p-2" placeholder="ملخص التقرير..."></textarea>
         </div>
 
         <div class="mt-3">
-          <label class="block text-sm mb-1">ملف التقرير (اختياري: PDF/صورة)</label>
-          <input id="adminFile" type="file" accept=".pdf,image/*" class="w-full" />
+          <label class="tiny">ملف التقرير (اختياري)</label>
+          <input id="recFile" type="file" accept=".pdf,image/*" class="w-full" />
           <div class="flex items-center gap-2 mt-2">
-            <input id="embedCheckbox" type="checkbox" checked />
-            <label for="embedCheckbox" class="text-sm text-slate-500">تضمين الملف داخل التشفير (مناسب لرفع ثابت)</label>
+            <input id="recEmbed" type="checkbox" checked />
+            <label class="tiny">تضمين الملف داخل السجل (embedded)</label>
           </div>
         </div>
 
         <div class="mt-4 flex gap-2">
-          <button id="btnGen" class="px-4 py-2 bg-green-600 text-white rounded-md">Encrypt & Generate</button>
-          <button id="btnDownloadJson" class="px-4 py-2 border rounded-md">Encrypt + Download data.json</button>
-          <button id="btnImport" class="px-4 py-2 border rounded-md">استيراد data.json موجود</button>
-          <input id="fileImport" type="file" accept=".json" class="hidden" />
+          <button id="btnCreate" class="px-4 py-2 bg-emerald-600 text-white rounded">Encrypt & Create</button>
+          <button id="btnDownload" class="px-4 py-2 border rounded">Encrypt + Download data.json</button>
+          <button id="btnPush" class="px-4 py-2 border rounded">Push to GitHub (commit)</button>
         </div>
 
-        <div id="adminResult" class="mt-4"></div>
+        <div id="adminMsg" class="mt-3 tiny"></div>
 
-        <div class="mt-3">
-          <h3 class="text-sm font-medium">معاينة السجل المشفَّر</h3>
-          <pre id="recordPreview" class="code"></pre>
+        <div class="mt-4">
+          <h3 class="tiny font-medium mb-2">سجل مشفَّر (preview)</h3>
+          <pre id="previewRec" class="code"></pre>
         </div>
 
         <div class="mt-3 flex gap-4 items-start">
-          <canvas id="qrCanvas" width="120" height="120" class="border rounded-md"></canvas>
-          <div id="embedPreview"></div>
+          <canvas id="qrPreview" width="120" height="120" class="border rounded p-1"></canvas>
+          <div id="embeddedPreview"></div>
         </div>
 
         <div class="mt-4">
-          <h3 class="text-sm font-medium">دمج/تحميل</h3>
-          <p class="hint">عند تنزيل ملف data.json سيكون مزيجاً لما في الذاكرة + السجل الجديد. يمكنك دمجه على الريبو.</p>
+          <h3 class="tiny font-medium">إدارة data.json</h3>
+          <div class="flex gap-2">
+            <input id="fileImport" type="file" accept=".json" class="hidden" />
+            <button id="btnImport" class="px-3 py-2 border rounded tiny">استيراد data.json</button>
+            <button id="btnFetch" class="px-3 py-2 border rounded tiny">جلب data.json أونلاين</button>
+            <button id="btnClearLocal" class="px-3 py-2 border rounded tiny">مسح local (non-persistent)</button>
+          </div>
+          <div class="tiny muted mt-2">استيراد/جلب يتيح لك العمل على نسخة محلية ثم تنزيلها أو رفعها إلى GitHub.</div>
         </div>
-      </div>
 
+      </div>
     </section>
+
   </div>
 
-  <footer class="mt-6 text-sm text-slate-500 text-center">
-    تحذير: هذا حل ثابت وآمن نسبياً. للحماية المطلقة استخدم backend مؤمَّن و repo خاص أو سحابة خاصة.
+  <footer class="mt-6 tiny muted text-center">
+    ملحوظة أمنيّة: وظيفة Push تتطلب PAT — لا تشارك الـ token. استخدم repo خاص إن كانت البيانات حقيقية.
   </footer>
 </div>
 
 <script>
-/* ---------------------------
-   إعدادات التشفير والمساعدة
-   ---------------------------
-   - السجلات مشفّرة per-record باستخدام AES-GCM
-   - المفتاح مشتق من الكود بواسطة PBKDF2 (iterations = 200000)
-   - صيغة كل سجل في data.json:
-     {
-       "code_hint": "AB***",
-       "salt": "...", "iv": "...", "ciphertext":"...",
-       "report_url": "...", "expires_at": "2026-04-01" // optional
-     }
-   - ملفات مضمنة تُخزَّن كـ payload.file_embedded = {filename, data_base64}
-   --------------------------- */
+/* ============================
+   Config & helpers
+   ============================ */
+const ITERATIONS = 200000; // PBKDF2
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
-const ITERATIONS = 200000;
-
-// utils
-function randStr(len=12){
+function randCode(len=10){
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
   let s=''; for(let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)]; return s;
 }
-function ab2b64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function ab2b64(ab){ return btoa(String.fromCharCode(...new Uint8Array(ab))); }
 function b642ab(b64){ return Uint8Array.from(atob(b64), c=>c.charCodeAt(0)); }
-function show(el, yes=true){ el.classList.toggle('hidden', !yes); }
 function nowISO(){ return new Date().toISOString(); }
 
-// derive PBKDF2 key (Web Crypto)
+/* ---------- WebCrypto: derive key, encrypt, decrypt ---------- */
 async function deriveKey(code, saltB64){
-  const enc = new TextEncoder();
-  const baseKey = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey']);
   const salt = b642ab(saltB64);
-  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations: ITERATIONS, hash:'SHA-256'}, baseKey, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+  const base = await crypto.subtle.importKey('raw', encoder.encode(code), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name:'PBKDF2', salt, iterations: ITERATIONS, hash: 'SHA-256' }, base, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
 }
 
-async function encryptPayload(code, payloadObj){
+async function encryptPayload(code, payload){
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(code, ab2b64(salt));
-  const enc = new TextEncoder();
-  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(JSON.stringify(payloadObj)));
+  const ct = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, encoder.encode(JSON.stringify(payload)));
   return { salt: ab2b64(salt), iv: ab2b64(iv), ciphertext: ab2b64(ct) };
 }
 
 async function decryptRecord(code, rec){
+  // expects rec: { salt, iv, ciphertext } or throws
   const key = await deriveKey(code, rec.salt);
-  const iv = b642ab(rec.iv);
-  const ct = b642ab(rec.ciphertext);
-  const plain = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
-  const dec = new TextDecoder();
-  return JSON.parse(dec.decode(plain));
+  const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b642ab(rec.iv) }, key, b642ab(rec.ciphertext));
+  return JSON.parse(decoder.decode(plain));
 }
 
-/* ---------------------------
-   Admin password (localStorage)
-   - تخزين hash لكلمة المرور في localStorage (ليس على الخادم)
-   - عند أول إعداد: أنشئ كلمة مرور جديدة
-   - للتحقق: نقارن digest SHA-256
-   --------------------------- */
-const ADMINKEY = 'rv_admin_hash';
-
-async function sha256b64(s){
-  const enc = new TextEncoder();
-  const h = await crypto.subtle.digest('SHA-256', enc.encode(s));
-  return ab2b64(h);
-}
-
-async function setAdminPassword(pwd){
-  const h = await sha256b64(pwd + '::rv_salt_v1'); // salt ثابت محلي
-  localStorage.setItem(ADMINKEY, h);
-}
-function removeAdminPassword(){
-  localStorage.removeItem(ADMINKEY);
-}
-function hasAdminPassword(){ return !!localStorage.getItem(ADMINKEY); }
-async function verifyAdminPassword(pwd){
-  const stored = localStorage.getItem(ADMINKEY);
-  if(!stored) return false;
-  const h = await sha256b64(pwd + '::rv_salt_v1');
-  return (h === stored);
-}
-
-/* ---------------------------
-   DOM references
-   --------------------------- */
-const btnAdminLockToggle = document.getElementById('btnAdminLockToggle');
-const adminSetBox = document.getElementById('adminSetBox');
-const adminLoginBox = document.getElementById('adminLoginBox');
-const adminPanel = document.getElementById('adminPanel');
-const btnSetAdmin = document.getElementById('btnSetAdmin');
-const btnRemoveAdmin = document.getElementById('btnRemoveAdmin');
-const btnAdminLogin = document.getElementById('btnAdminLogin');
-const adminPwd = document.getElementById('adminPwd');
-const adminSetPwd = document.getElementById('adminSetPwd');
-const adminStatus = document.getElementById('adminStatus');
-const btnGen = document.getElementById('btnGen');
-const btnDownloadJson = document.getElementById('btnDownloadJson');
-const btnImport = document.getElementById('btnImport');
-const fileImport = document.getElementById('fileImport');
-const recordPreview = document.getElementById('recordPreview');
-const adminResult = document.getElementById('adminResult');
-const qrCanvas = document.getElementById('qrCanvas');
-const embedPreview = document.getElementById('embedPreview');
-
-const btnFind = document.getElementById('btnFind');
-const btnClear = document.getElementById('btnClear');
-const patientCode = document.getElementById('patientCode');
-const patientMsg = document.getElementById('patientMsg');
+/* ============================
+   App state
+   ============================ */
+let DATA = { reports: [] }; // in-memory
+let GH = { owner:'', repo:'', path:'data.json', token: '' };
+const patientInput = document.getElementById('patientInput');
+const patientStatus = document.getElementById('patientStatus');
 const patientResult = document.getElementById('patientResult');
 
-/* ---------------------------
-   Admin lock / unlock logic
-   --------------------------- */
-function refreshAdminUI(){
-  if(!hasAdminPassword()){
-    // no password set -> show set box
-    adminSetBox.style.display = 'block';
-    adminLoginBox.style.display = 'none';
-    adminPanel.classList.add('hidden');
-  } else {
-    // password exists -> show login
-    adminSetBox.style.display = 'none';
-    adminLoginBox.style.display = 'block';
-    adminPanel.classList.add('hidden');
+const btnToggleAdmin = document.getElementById('btnToggleAdmin');
+const adminBox = document.getElementById('adminBox');
+const adminMsg = document.getElementById('adminMsg');
+const previewRec = document.getElementById('previewRec');
+const qrPreview = document.getElementById('qrPreview');
+
+const ghOwner = document.getElementById('ghOwner');
+const ghRepo = document.getElementById('ghRepo');
+const ghPath = document.getElementById('ghPath');
+const ghToken = document.getElementById('ghToken');
+
+const recCode = document.getElementById('recCode');
+const recDate = document.getElementById('recDate');
+const recName = document.getElementById('recName');
+const recSummary = document.getElementById('recSummary');
+const recFile = document.getElementById('recFile');
+const recEmbed = document.getElementById('recEmbed');
+const recExpiry = document.getElementById('recExpiry');
+
+const btnCreate = document.getElementById('btnCreate');
+const btnDownload = document.getElementById('btnDownload');
+const btnPush = document.getElementById('btnPush');
+const btnImport = document.getElementById('btnImport');
+const fileImport = document.getElementById('fileImport');
+const btnFetch = document.getElementById('btnFetch');
+const btnClearLocal = document.getElementById('btnClearLocal');
+const btnSearch = document.getElementById('btnSearch');
+const btnSearchClear = document.getElementById('btnClearLocal') || document.getElementById('btnClearLocal');
+
+/* ============================
+   Utility UI helpers
+   ============================ */
+function setPatientStatus(html, type='muted'){ patientStatus.innerHTML = `<div class="tiny ${type==='error'?'text-red-600':'text-slate-500'}">${html}</div>`; setTimeout(()=>patientStatus.innerHTML='',5000); }
+function setAdminMsg(html, ok=true){ adminMsg.innerHTML = `<div class="tiny ${ok?'text-green-600':'text-red-600'}">${html}</div>`; setTimeout(()=>adminMsg.innerHTML='',6000); }
+function showPreview(obj){ previewRec.textContent = JSON.stringify(obj, null, 2); }
+
+/* ============================
+   Load data.json from same origin (GitHub Pages)
+   ============================ */
+async function fetchOnlineData(){
+  try {
+    const res = await fetch('data.json', { cache: 'no-store' });
+    if(!res.ok) throw new Error('data.json غير موجود على المسار الحالي');
+    const json = await res.json();
+    DATA = json;
+    setAdminMsg('تم جلب data.json أونلاين', true);
+    return json;
+  } catch(e){
+    console.error(e);
+    setAdminMsg('فشل جلب data.json: ' + (e.message||e), false);
+    throw e;
   }
 }
-refreshAdminUI();
 
-btnAdminLockToggle.addEventListener('click', ()=>{
-  // toggle visibility of admin area
-  const el = document.getElementById('adminLockBox');
-  el.classList.toggle('hidden');
+/* ============================
+   Patient flow: search & decrypt
+   ============================ */
+btnSearch.addEventListener('click', async ()=>{
+  const code = patientInput.value.trim();
+  patientResult.innerHTML = ''; if(!code){ setPatientStatus('ادخل الكود أو المسح'); return; }
+  setPatientStatus('جاري البحث وفك التشفير...');
+  // if DATA empty, try fetch
+  if(!DATA || !Array.isArray(DATA.reports) || DATA.reports.length===0){
+    try { await fetchOnlineData(); } catch(e){ setPatientStatus('لا يوجد بيانات'); return; }
+  }
+  let found=false;
+  for(const rec of DATA.reports){
+    // skip expired
+    if(rec.expires_at){
+      const today = new Date().toISOString().slice(0,10);
+      if(rec.expires_at < today) continue;
+    }
+    try {
+      if(rec.ciphertext){ // encrypted record
+        const plain = await decryptRecord(code, rec);
+        displayPatientRecord(plain, rec);
+        found=true; break;
+      } else {
+        // plaintext record (legacy or admin chose not to encrypt) : check if code matches hint? we must store code in plaintext if no encryption
+        // We don't store code in plaintext for security — but allow matching by report identifier in record.report_code if present
+        if(rec.report_code && rec.report_code === code){
+          displayPatientRecord({ patient_name: rec.patient_name, exam_date: rec.exam_date, summary: rec.summary, file_embedded: rec.file_embedded }, rec);
+          found=true; break;
+        }
+      }
+    } catch(e){
+      // wrong key for this record -> ignore
+    }
+  }
+  if(!found) setPatientStatus('لم يتم العثور على تقرير بالكود أو فشل فك التشفير','error');
 });
 
-btnSetAdmin.addEventListener('click', async ()=>{
-  const pwd = adminSetPwd.value.trim();
-  if(!pwd || pwd.length < 6){ alert('اختر كلمة مرور قوية لا تقل 6 حروف'); return; }
-  await setAdminPassword(pwd);
-  adminSetPwd.value='';
-  alert('تم إنشاء كلمة مرور الأدمن (محلياً). احتفظ بها.');
-  refreshAdminUI();
-});
+function displayPatientRecord(plain, recMeta){
+  let html = `<div class="p-4 border rounded-md"><h3 class="font-semibold">تقرير</h3>`;
+  html += `<div class="tiny text-slate-600">المريض: ${plain.patient_name||'-'} • التاريخ: ${plain.exam_date||'-'}</div>`;
+  html += `<div class="mt-3"><strong>الملخص</strong><pre class="whitespace-pre-wrap bg-slate-50 p-3 rounded-md">${plain.summary||'-'}</pre></div>`;
+  if(plain.file_embedded){
+    const b64 = plain.file_embedded.data_base64;
+    const fname = plain.file_embedded.filename || 'file';
+    if(fname.toLowerCase().endsWith('.pdf')){
+      html += `<div class="mt-3"><iframe src="data:application/pdf;base64,${b64}" class="w-full h-72 border rounded-md"></iframe></div>`;
+    } else {
+      html += `<div class="mt-3"><img src="data:image/*;base64,${b64}" class="w-full rounded-md"/></div>`;
+    }
+  } else if(recMeta.report_url){
+    html += `<div class="mt-3 tiny text-slate-500">ملف مرجع: <a href="${recMeta.report_url}" target="_blank" class="text-sky-600">${recMeta.report_url}</a></div>`;
+  }
+  html += `</div>`;
+  patientResult.innerHTML = html;
+  setPatientStatus('تم العثور على التقرير', 'muted');
+}
 
-btnRemoveAdmin.addEventListener('click', ()=>{
-  if(confirm('هل تريد حذف كلمة مرور الأدمن المحفوظة محلياً؟ هذا سيجعلك تحتاج لإعادة إنشائها.')) {
-    removeAdminPassword(); refreshAdminUI(); alert('تم الحذف');
+/* ============================
+   Admin: create record, optional embed
+   ============================ */
+btnCreate.addEventListener('click', async ()=>{
+  adminMsg.innerHTML=''; previewRec.textContent=''; document.getElementById('embeddedPreview').innerHTML='';
+  const code = recCode.value.trim() || randCode(10);
+  const name = recName.value.trim();
+  const date = recDate.value || '';
+  const summary = recSummary.value.trim();
+  const expiry = recExpiry.value || '';
+  const embed = recEmbed.checked;
+  const file = recFile.files[0];
+
+  const payload = { patient_name: name || '', exam_date: date || '', summary: summary || '', created_at: nowISO() };
+  if(expiry){
+    const days = parseInt(expiry,10);
+    const d = new Date(); d.setDate(d.getDate() + days);
+    payload.expires_at = d.toISOString().slice(0,10);
+  }
+
+  if(file && embed){
+    // embed as base64
+    try {
+      const b64 = await fileToBase64(file);
+      payload.file_embedded = { filename: file.name, data_base64: b64 };
+      payload.report_url = null;
+    } catch(e){ setAdminMsg('خطأ قراءة الملف'); return; }
+  } else if(file){
+    payload.report_url = `reports/${code}-${file.name.replace(/\s+/g,'_')}`;
+  } else payload.report_url = null;
+
+  try {
+    // encrypt payload using code
+    const enc = await encryptPayload(code, payload);
+    const record = { code_hint: code.slice(0,2)+'***', salt: enc.salt, iv: enc.iv, ciphertext: enc.ciphertext, report_url: payload.report_url, expires_at: payload.expires_at || null };
+    // push to in-memory DATA (append)
+    DATA.reports.push(record);
+    showPreview(record);
+    new QRious({ element: qrPreview, value: code, size:120, level:'H' });
+    setAdminMsg('تم إنشاء السجل محليًا — يمكنك تنزيل أو نشره', true);
+  } catch(e){
+    console.error(e); setAdminMsg('فشل التشفير', false);
   }
 });
 
-btnAdminLogin.addEventListener('click', async ()=>{
-  const pwd = adminPwd.value.trim();
-  if(!pwd){ adminStatus.textContent='ادخل كلمة المرور'; return; }
-  const ok = await verifyAdminPassword(pwd);
-  if(ok){
-    adminPwd.value=''; adminStatus.textContent='تم تسجيل الدخول';
-    adminPanel.classList.remove('hidden');
-    document.getElementById('adminLockBox').classList.add('hidden'); // hide lock box
-  } else {
-    adminStatus.textContent='كلمة المرور غير صحيحة';
-  }
-});
-
-/* ---------------------------
-   Admin features: generate record
-   --------------------------- */
-async function fileToBase64(file){
+/* helper to read file to base64 */
+function fileToBase64(file){
   return new Promise((res, rej)=>{
     const r = new FileReader();
     r.onload = ()=> res(r.result.split(',')[1]);
@@ -319,168 +343,104 @@ async function fileToBase64(file){
   });
 }
 
-async function handleGenerate({download=false}){
-  adminResult.innerHTML=''; recordPreview.textContent=''; embedPreview.innerHTML='';
-  const codeInput = document.getElementById('adminCode').value.trim();
-  const code = codeInput || randStr(10);
-  const name = document.getElementById('adminName').value.trim();
-  const date = document.getElementById('adminDate').value;
-  const summary = document.getElementById('adminSummary').value.trim();
-  const file = document.getElementById('adminFile').files[0];
-  const embed = document.getElementById('embedCheckbox').checked;
-  const expirySel = document.getElementById('expirySelect').value;
+/* ============================
+   Download merged data.json
+   ============================ */
+btnDownload.addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'data.json'; a.click();
+  URL.revokeObjectURL(url);
+  setAdminMsg('تم تنزيل data.json جاهز للرفع', true);
+});
 
-  // build payload
-  const payload = { patient_name: name || '', exam_date: date || '', summary: summary || '', created_at: nowISO() };
-  if(expirySel){
-    const days = parseInt(expirySel,10);
-    const expDate = new Date(); expDate.setDate(expDate.getDate() + days);
-    payload.expires_at = expDate.toISOString().slice(0,10);
-  }
-
-  if(file && embed){
-    const b64 = await fileToBase64(file);
-    payload.file_embedded = { filename: file.name, data_base64: b64 };
-    payload.report_url = null;
-  } else if(file){
-    payload.report_url = `reports/${code}-${file.name.replace(/\s+/g,'_')}`;
-  } else {
-    payload.report_url = null;
-  }
-
-  try {
-    const rec = await encryptPayload(code, payload);
-    const record = { code_hint: code.slice(0,2) + '***', salt: rec.salt, iv: rec.iv, ciphertext: rec.ciphertext, report_url: payload.report_url, expires_at: payload.expires_at || null };
-    recordPreview.textContent = JSON.stringify(record, null, 2);
-    adminResult.innerHTML = `<div class="text-sm text-green-600">تم إنشاء السجل. الكود: <strong>${code}</strong></div>`;
-    // QR
-    new QRious({ element: qrCanvas, value: code, size:120, level:'H' });
-
-    // show embedded preview if exist
-    if(payload.file_embedded){
-      const mime = payload.file_embedded.filename.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/*';
-      const dataUrl = `data:${mime};base64,${payload.file_embedded.data_base64}`;
-      if(mime==='application/pdf'){
-        embedPreview.innerHTML = `<div class="text-sm">معاينة PDF مضمّن</div><iframe src="${dataUrl}" class="w-full h-48 border rounded-md mt-2"></iframe>`;
-      } else {
-        embedPreview.innerHTML = `<div class="text-sm">معاينة صورة مضمّنة</div><img src="${dataUrl}" class="w-full rounded-md mt-2" />`;
-      }
-    } else if(payload.report_url){
-      embedPreview.innerHTML = `<div class="text-sm text-slate-500">ملف مرجع: <code>${payload.report_url}</code></div>`;
-    } else embedPreview.innerHTML='';
-
-    // download
-    if(download){
-      const wrapper = { reports: [record] };
-      const blob = new Blob([JSON.stringify(wrapper, null, 2)], { type:'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `data-${code}.json`; a.click();
-      URL.revokeObjectURL(url);
-      adminResult.innerHTML += `<div class="text-sm text-green-600 mt-2">تم تنزيل ملف data-${code}.json</div>`;
-    }
-
-  } catch(e){
-    console.error(e);
-    adminResult.innerHTML = `<div class="text-sm text-red-600">حدث خطأ أثناء التشفير</div>`;
-  }
-}
-
-btnGen.addEventListener('click', ()=> handleGenerate({download:false}));
-btnDownloadJson.addEventListener('click', ()=> handleGenerate({download:true}));
-
-/* ---------------------------
+/* ============================
    Import existing data.json (merge)
-   --------------------------- */
+   ============================ */
 btnImport.addEventListener('click', ()=> fileImport.click());
 fileImport.addEventListener('change', async (ev)=>{
   const f = ev.target.files[0]; if(!f) return;
   try {
-    const text = await f.text();
-    const obj = JSON.parse(text);
-    // simple validation
-    if(!Array.isArray(obj.reports)) { alert('الملف غير مطابق: يجب أن يحتوي على مفتاح "reports" كمصفوفة'); return; }
-    // download merged file: try to fetch existing data.json (if present)
-    let existing = { reports: [] };
-    try {
-      const res = await fetch('data.json',{cache:'no-store'});
-      if(res.ok){ existing = await res.json(); if(!Array.isArray(existing.reports)) existing = { reports: [] }; }
-    } catch(e){}
-    const merged = { reports: [ ...existing.reports, ...obj.reports ] };
-    const blob = new Blob([JSON.stringify(merged,null,2)], { type:'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href=url; a.download = 'data-merged.json'; a.click();
-    URL.revokeObjectURL(url);
-    adminResult.innerHTML = `<div class="text-sm text-green-600">تم إنشاء ملف data-merged.json للتحميل — ارفع الملف إلى repo.</div>`;
-  } catch(e){ console.error(e); alert('خطأ في قراءة الملف'); }
+    const txt = await f.text(); const obj = JSON.parse(txt);
+    if(!obj || !Array.isArray(obj.reports)) { setAdminMsg('ملف غير صالح', false); return; }
+    // merge (simple concat)
+    DATA.reports = (DATA.reports || []).concat(obj.reports);
+    setAdminMsg('تم دمج البيانات محليًا', true);
+  } catch(e){ console.error(e); setAdminMsg('خطأ قراءة الملف', false); }
 });
 
-/* ---------------------------
-   Patient flow: search & decrypt
-   --------------------------- */
-function setPatientMsg(html, color='slate'){
-  patientMsg.innerHTML = `<div class="p-2 text-sm text-${color}-600">${html}</div>`;
-  setTimeout(()=>{ if(patientMsg) patientMsg.innerHTML=''; }, 6000);
-}
-btnFind.addEventListener('click', async ()=>{
-  const code = patientCode.value.trim();
-  patientResult.innerHTML=''; if(!code){ setPatientMsg('ادخل الكود أولاً','red'); return; }
-  setPatientMsg('جاري البحث وفك التشفير...','slate');
+/* ============================
+   Fetch online (re-read) data.json
+   ============================ */
+btnFetch.addEventListener('click', async ()=>{
   try {
-    const res = await fetch('data.json', {cache:'no-store'});
-    if(!res.ok) throw new Error('لا يوجد data.json');
-    const db = await res.json();
-    let ok=false;
-    for(const rec of db.reports){
-      // check expiry if present
-      if(rec.expires_at){
-        const today = new Date().toISOString().slice(0,10);
-        if(rec.expires_at < today) continue; // expired
-      }
-      try {
-        const plain = await decryptRecord(code, rec);
-        ok=true;
-        // display
-        let html = `<div class="p-4 border rounded-md"><h3 class="font-semibold">تفاصيل التقرير</h3>`;
-        html += `<div class="text-sm text-slate-600">المريض: ${plain.patient_name||'-'} • التاريخ: ${plain.exam_date||'-'}</div>`;
-        html += `<div class="mt-3"><strong>الملخص</strong><pre class="whitespace-pre-wrap bg-slate-50 p-3 rounded-md">${plain.summary||'-'}</pre></div>`;
-        if(plain.file_embedded){
-          const b64 = plain.file_embedded.data_base64;
-          const fname = plain.file_embedded.filename || 'file';
-          if(fname.toLowerCase().endsWith('.pdf')){
-            html += `<div class="mt-3"><iframe src="data:application/pdf;base64,${b64}" class="w-full h-72 border rounded-md"></iframe></div>`;
-          } else {
-            html += `<div class="mt-3"><img src="data:image/*;base64,${b64}" class="w-full rounded-md" /></div>`;
-          }
-        } else if(rec.report_url){
-          html += `<div class="mt-3 text-sm text-slate-500">ملف مرجع: <a href="${rec.report_url}" target="_blank" class="text-sky-600">${rec.report_url}</a></div>`;
-        }
-        html += `</div>`;
-        patientResult.innerHTML = html;
-        setPatientMsg('تم فك التشفير بنجاح','green');
-        break;
-      } catch(e){
-        // key wrong for this record — try next
-      }
+    await fetchOnlineData();
+  } catch(e){}
+});
+
+/* ============================
+   Push to GitHub (create/update file)
+   Uses GitHub REST API:
+   - GET contents to obtain sha if exists
+   - PUT contents with base64 content and message
+   ============================ */
+btnPush.addEventListener('click', async ()=>{
+  // read GH inputs
+  GH.owner = ghOwner.value.trim(); GH.repo = ghRepo.value.trim(); GH.path = ghPath.value.trim() || 'data.json';
+  GH.token = ghToken.value.trim();
+  if(!GH.owner || !GH.repo || !GH.token){ setAdminMsg('ادخل owner, repo, و PAT', false); return; }
+
+  const apiBase = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${encodeURIComponent(GH.path)}`;
+  try {
+    setAdminMsg('جارِ التحقق من الملف على GitHub...', true);
+    // check if file exists to get sha
+    const getRes = await fetch(apiBase, { headers: { Authorization: `token ${GH.token}`, Accept: 'application/vnd.github+json' } });
+    let sha = null;
+    if(getRes.ok){
+      const js = await getRes.json();
+      sha = js.sha;
     }
-    if(!ok) setPatientMsg('الكود غير صحيح أو لا توجد بيانات مطابقة','red');
+
+    // prepare content
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(DATA, null, 2)))); // base64
+    const body = {
+      message: `Update data.json via Radiology Vault UI`,
+      content: content,
+      committer: { name: "Radiology Vault", email: "noreply@example.com" }
+    };
+    if(sha) body.sha = sha;
+
+    setAdminMsg('جار رفع التغييرات إلى GitHub...', true);
+    const putRes = await fetch(apiBase, { method: 'PUT', headers: { Authorization: `token ${GH.token}`, Accept: 'application/vnd.github+json', 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+    if(!putRes.ok){
+      const err = await putRes.json().catch(()=>({message: putRes.statusText}));
+      console.error(err);
+      setAdminMsg('فشل الرفع: ' + (err.message || 'unknown'), false);
+      return;
+    }
+    setAdminMsg('تم رفع data.json إلى GitHub بنجاح ✅', true);
   } catch(e){
-    console.error(e);
-    setPatientMsg('خطأ في تحميل data.json أو التنسيق','red');
+    console.error(e); setAdminMsg('خطأ أثناء الاتصال بـ GitHub', false);
   }
 });
 
-btnClear.addEventListener('click', ()=>{ patientCode.value=''; patientResult.innerHTML=''; patientMsg.innerHTML=''; });
+/* ============================
+   Clear session local DATA
+   ============================ */
+btnClearLocal.addEventListener('click', ()=>{ DATA = { reports: [] }; setAdminMsg('تم تنظيف النسخة المحلية', true); });
 
-/* ---------------------------
-   init: hide panels based on state
-   --------------------------- */
-(function init(){
-  // If admin password exists show login box; else show set password box
-  refreshAdminUI();
-  // hide admin area initially
-  document.getElementById('adminLockBox').classList.remove('hidden');
+/* ============================
+   Toggle admin UI
+   ============================ */
+btnToggleAdmin.addEventListener('click', ()=> adminBox.classList.toggle('hidden'));
+
+/* ============================
+   Init: try to fetch online data.json silently
+   ============================ */
+(async function init(){
+  try { await fetchOnlineData(); } catch(e) { /* ignore */ }
 })();
-</script>
 
+</script>
 </body>
 </html>
