@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Integrated Anatomy + Quiz (Tabs) — Preserved Content</title>
+  <meta name="description" content="Original anatomy content and quiz preserved, organized with professional tabs and PDF download button." />
+  <style>
+  
+/* === Tabs Shell (namespaced) === */
+:root{ --brand:#0a7cc9; --bg:#f5f7fb; --ink:#1f2a37; }
+body{ background: var(--bg); }
+._tabs-shell{ max-width: 1200px; margin: 0 auto; padding: 12px; }
+._header{
+  position: sticky; top:0; z-index:100; background: linear-gradient(90deg,#0a7cc9,#09a7c9);
+  color:#fff; padding:12px 14px; border-radius: 0 0 10px 10px; box-shadow:0 2px 12px rgba(0,0,0,.08);
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+}
+._title{ font-weight:800; letter-spacing:.3px; }
+._controls{ display:flex; gap:8px; align-items:center; }
+._btn{
+  background:#fff; color:#0a7cc9; border:none; border-radius:10px; padding:8px 12px; font-weight:700; cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+._tabs{ display:flex; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.06); margin:12px 0; }
+._tab-btn{ flex:1; padding:12px; border:none; background:#fff; cursor:pointer; font-weight:700; }
+._tab-btn:hover{ background:#eaf5ff; }
+._tab-btn._active{ background:#0a7cc9; color:#fff; }
+._content{ background:#fff; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.06); padding: 0; }
+._panel{ display:none; padding: 0; }
+._panel._active{ display:block; }
+._panel-inner{ padding: 14px; }
+/* Preserve printability */
+@media print{
+  ._tabs, ._controls, ._header{ display:none !important; }
+  ._content, ._panel, ._panel-inner{ display:block !important; box-shadow:none; padding:0; }
+  body{ background:#fff; }
+}
+
+  </style>
+
+  <!-- ===== Combined Original HEAD Content (Preserved) ===== -->
+  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comprehensive Anatomy Summary - Dr. Abdelrahman</title>
@@ -168,8 +208,335 @@
             }
         }
     </style>
+
+
+<!-- ===== Original HEAD Block ===== -->
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+    body {
+      font-family: 'Cairo', 'Inter', Tahoma, Arial, sans-serif;
+      background-color: #fefefe;
+      color: #222831;
+      margin: 0;
+      padding: 40px 20px;
+      line-height: 1.6;
+      direction: ltr;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: 2.8rem;
+      text-align: center;
+      color: #30475e;
+      margin-bottom: 12px;
+      letter-spacing: 1.3px;
+    }
+    p.subtitle {
+      text-align: center;
+      font-size: 1.15rem;
+      color: #57606f;
+      margin-bottom: 50px;
+      font-weight: 500;
+    }
+    .question-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(48, 71, 94, 0.1);
+      padding: 25px 30px;
+      margin-bottom: 30px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+    .question-card:hover {
+      box-shadow: 0 12px 34px rgba(48, 71, 94, 0.15);
+      transform: translateY(-5px);
+    }
+    .question-number {
+      display: inline-block;
+      background: #0077b6;
+      color: white;
+      font-weight: 700;
+      font-size: 1.3rem;
+      width: 44px;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 18px;
+      box-shadow: 0 3px 12px rgba(0, 119, 182, 0.4);
+      vertical-align: middle;
+    }
+    .question-text {
+      font-weight: 700;
+      font-size: 1.28rem;
+      vertical-align: middle;
+      display: inline-block;
+      max-width: calc(100% - 70px);
+      color: #222831;
+    }
+    .answers {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .answer-option {
+      position: relative;
+      background: #e7e9f0;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 1.08rem;
+      color: #222831;
+      cursor: default;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.04);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+    .answer-option:hover {
+      background-color: #dbe0f7;
+      box-shadow: 0 5px 8px rgb(0 0 0 / 0.1);
+    }
+    .answer-option[data-letter]::before {
+      content: attr(data-letter);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0077b6;
+      background-color: #d6e4ff;
+      border-radius: 50%;
+      margin-left: 18px;
+      box-shadow: 0 2px 6px rgba(0,119,182,0.25);
+    }
+    .answer-option.correct {
+      background-color: #38a169;
+      color: #e6f4ea;
+      font-weight: 700;
+      box-shadow: 0 0 12px 3px rgba(56, 161, 105, 0.5);
+      border: 2px solid #27ae60;
+      cursor: default;
+    }
+    .answer-option.correct[data-letter]::before {
+      content: "✔";
+      font-size: 1.4rem;
+      color: #e6f4ea;
+      background-color: #2f855a;
+      box-shadow: 0 0 8px rgba(47, 133, 90, 0.8);
+    }
+    @media (max-width: 560px) {
+      body {
+        padding: 20px 16px;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      .question-text {
+        font-size: 1.1rem;
+        max-width: calc(100% - 60px);
+      }
+      .question-card {
+        padding: 20px 22px;
+        margin-bottom: 24px;
+      }
+      .answer-option {
+        font-size: 1rem;
+        padding: 12px 18px;
+      }
+      .answer-option[data-letter]::before {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        margin-left: 14px;
+      }
+      .question-number {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        line-height: 36px;
+        margin-right: 12px;
+      }
+    }
+  </style>
+
+
+<!-- ===== Original HEAD Block ===== -->
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Radiology Questions Part 2 (49-100)</title>
+<style>
+    body {
+      font-family: 'Cairo', 'Inter', Tahoma, Arial, sans-serif;
+      background-color: #fefefe;
+      color: #222831;
+      margin: 0;
+      padding: 40px 20px;
+      line-height: 1.6;
+      direction: ltr;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: 2.8rem;
+      text-align: center;
+      color: #30475e;
+      margin-bottom: 12px;
+      letter-spacing: 1.3px;
+    }
+    .question-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(48, 71, 94, 0.1);
+      padding: 25px 30px;
+      margin-bottom: 30px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+    .question-card:hover {
+      box-shadow: 0 12px 34px rgba(48, 71, 94, 0.15);
+      transform: translateY(-5px);
+    }
+    .question-number {
+      display: inline-block;
+      background: #0077b6;
+      color: white;
+      font-weight: 700;
+      font-size: 1.3rem;
+      width: 44px;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 18px;
+      box-shadow: 0 3px 12px rgba(0, 119, 182, 0.4);
+      vertical-align: middle;
+    }
+    .question-text {
+      font-weight: 700;
+      font-size: 1.28rem;
+      vertical-align: middle;
+      display: inline-block;
+      max-width: calc(100% - 70px);
+      color: #222831;
+    }
+    .answers {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .answer-option {
+      position: relative;
+      background: #e7e9f0;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 1.08rem;
+      color: #222831;
+      cursor: default;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.04);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+    .answer-option:hover {
+      background-color: #dbe0f7;
+      box-shadow: 0 5px 8px rgb(0 0 0 / 0.1);
+    }
+    .answer-option[data-letter]::before {
+      content: attr(data-letter);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0077b6;
+      background-color: #d6e4ff;
+      border-radius: 50%;
+      margin-left: 18px;
+      box-shadow: 0 2px 6px rgba(0,119,182,0.25);
+    }
+    .answer-option.correct {
+      background-color: #38a169;
+      color: #e6f4ea;
+      font-weight: 700;
+      box-shadow: 0 0 12px 3px rgba(56, 161, 105, 0.5);
+      border: 2px solid #27ae60;
+      cursor: default;
+    }
+    .answer-option.correct[data-letter]::before {
+      content: "✔";
+      font-size: 1.4rem;
+      color: #e6f4ea;
+      background-color: #2f855a;
+      box-shadow: 0 0 8px rgba(47, 133, 90, 0.8);
+    }
+    @media (max-width: 560px) {
+      body {
+        padding: 20px 16px;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      .question-text {
+        font-size: 1.1rem;
+        max-width: calc(100% - 60px);
+      }
+      .question-card {
+        padding: 20px 22px;
+        margin-bottom: 24px;
+      }
+      .answer-option {
+        font-size: 1rem;
+        padding: 12px 18px;
+      }
+      .answer-option[data-letter]::before {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        margin-left: 14px;
+      }
+      .question-number {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        line-height: 36px;
+        margin-right: 12px;
+      }
+    }
+  </style>
+
 </head>
 <body>
+  <div class="_header">
+    <div class="_title">Integrated Anatomy & Quiz — Original Content</div>
+    <div class="_controls">
+      <button class="_btn" onclick="window.print()">⬇️ Download as PDF</button>
+    </div>
+  </div>
+
+  <div class="_tabs-shell">
+    <div class="_tabs" role="tablist">
+      <button class="_tab-btn _active" role="tab" aria-selected="true" aria-controls="panel-notes" onclick="__openTab('panel-notes', this)">Anatomy Content</button>
+      <button class="_tab-btn" role="tab" aria-selected="false" aria-controls="panel-quiz" onclick="__openTab('panel-quiz', this)">Quiz</button>
+    </div>
+
+    <div class="_content">
+      <!-- Panel 1: Anatomy Content (exactly as in original body[0]) -->
+      <section id="panel-notes" class="_panel _active" role="tabpanel">
+        <div class="_panel-inner original1">
+
 
     <button class="print-button" onclick="window.print()">Print Summary</button>
 
@@ -1048,169 +1415,14 @@
         <div class="page-footer">Page 27</div>
     </div>
 
-</body>
-</html>
 
+        </div>
+      </section>
 
-<!DOCTYPE html>
+      <!-- Panel 2: Quiz (exactly as in original body[1] if present) -->
+      <section id="panel-quiz" class="_panel" role="tabpanel">
+        <div class="_panel-inner original2">
 
-<html dir="ltr" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<style>
-    body {
-      font-family: 'Cairo', 'Inter', Tahoma, Arial, sans-serif;
-      background-color: #fefefe;
-      color: #222831;
-      margin: 0;
-      padding: 40px 20px;
-      line-height: 1.6;
-      direction: ltr;
-    }
-    h1 {
-      font-weight: 900;
-      font-size: 2.8rem;
-      text-align: center;
-      color: #30475e;
-      margin-bottom: 12px;
-      letter-spacing: 1.3px;
-    }
-    p.subtitle {
-      text-align: center;
-      font-size: 1.15rem;
-      color: #57606f;
-      margin-bottom: 50px;
-      font-weight: 500;
-    }
-    .question-card {
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(48, 71, 94, 0.1);
-      padding: 25px 30px;
-      margin-bottom: 30px;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-      user-select: none;
-    }
-    .question-card:hover {
-      box-shadow: 0 12px 34px rgba(48, 71, 94, 0.15);
-      transform: translateY(-5px);
-    }
-    .question-number {
-      display: inline-block;
-      background: #0077b6;
-      color: white;
-      font-weight: 700;
-      font-size: 1.3rem;
-      width: 44px;
-      height: 44px;
-      line-height: 44px;
-      text-align: center;
-      border-radius: 50%;
-      margin-right: 18px;
-      box-shadow: 0 3px 12px rgba(0, 119, 182, 0.4);
-      vertical-align: middle;
-    }
-    .question-text {
-      font-weight: 700;
-      font-size: 1.28rem;
-      vertical-align: middle;
-      display: inline-block;
-      max-width: calc(100% - 70px);
-      color: #222831;
-    }
-    .answers {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .answer-option {
-      position: relative;
-      background: #e7e9f0;
-      border-radius: 12px;
-      padding: 14px 22px;
-      font-size: 1.08rem;
-      color: #222831;
-      cursor: default;
-      box-shadow: 0 3px 6px rgb(0 0 0 / 0.04);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      align-items: center;
-      user-select: none;
-    }
-    .answer-option:hover {
-      background-color: #dbe0f7;
-      box-shadow: 0 5px 8px rgb(0 0 0 / 0.1);
-    }
-    .answer-option[data-letter]::before {
-      content: attr(data-letter);
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      width: 34px;
-      height: 34px;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #0077b6;
-      background-color: #d6e4ff;
-      border-radius: 50%;
-      margin-left: 18px;
-      box-shadow: 0 2px 6px rgba(0,119,182,0.25);
-    }
-    .answer-option.correct {
-      background-color: #38a169;
-      color: #e6f4ea;
-      font-weight: 700;
-      box-shadow: 0 0 12px 3px rgba(56, 161, 105, 0.5);
-      border: 2px solid #27ae60;
-      cursor: default;
-    }
-    .answer-option.correct[data-letter]::before {
-      content: "✔";
-      font-size: 1.4rem;
-      color: #e6f4ea;
-      background-color: #2f855a;
-      box-shadow: 0 0 8px rgba(47, 133, 90, 0.8);
-    }
-    @media (max-width: 560px) {
-      body {
-        padding: 20px 16px;
-      }
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
-      .question-text {
-        font-size: 1.1rem;
-        max-width: calc(100% - 60px);
-      }
-      .question-card {
-        padding: 20px 22px;
-        margin-bottom: 24px;
-      }
-      .answer-option {
-        font-size: 1rem;
-        padding: 12px 18px;
-      }
-      .answer-option[data-letter]::before {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-        margin-left: 14px;
-      }
-      .question-number {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
-        line-height: 36px;
-        margin-right: 12px;
-      }
-    }
-  </style>
-</head>
-<body>
 <div class="question-card">
 <span class="question-number">1</span>
 <span class="question-text">Ligamentum flavum is:</span>
@@ -1218,14 +1430,14 @@
 <div class="answer-option" data-letter="A">Outside the vertebral foramen.</div>
 <div class="answer-option" data-letter="B">In some vertebrae.</div>
 <div class="answer-option" data-letter="C">Between pedicles.</div>
-<div class="answer-option correct" data-letter="D">Inside the vertebral foramen.</div>
+<div class="answer-option" data-letter="D">Inside the vertebral foramen.</div>
 </div>
 </div>
 <div class="question-card">
 <span class="question-number">2</span>
 <span class="question-text">The atlas has:</span>
 <div class="answers">
-<div class="answer-option correct" data-letter="A">No body.</div>
+<div class="answer-option" data-letter="A">No body.</div>
 <div class="answer-option" data-letter="B">Two lateral masses &amp; one arch.</div>
 <div class="answer-option" data-letter="C">Two small tubercles in its transverse process.</div>
 <div class="answer-option" data-letter="D">All are true.</div>
@@ -1236,7 +1448,7 @@
 <span class="question-text">The intervertebral foramen is formed from notches in the:</span>
 <div class="answers">
 <div class="answer-option" data-letter="A">Laminae.</div>
-<div class="answer-option correct" data-letter="B">Pedicles.</div>
+<div class="answer-option" data-letter="B">Pedicles.</div>
 <div class="answer-option" data-letter="C">Transverse processes.</div>
 <div class="answer-option" data-letter="D">All are wrong.</div>
 </div>
@@ -1248,7 +1460,7 @@
 <div class="answer-option" data-letter="A">Decreases in size from cervical to sacral region.</div>
 <div class="answer-option" data-letter="B">Triangular.</div>
 <div class="answer-option" data-letter="C">Flat upper &amp; lower surfaces.</div>
-<div class="answer-option correct" data-letter="D">All are wrong.</div>
+<div class="answer-option" data-letter="D">All are wrong.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1258,7 +1470,7 @@
 <div class="answer-option">1st, 10th, 11th &amp; 12th vertebrae.</div>
 <div class="answer-option">10th, 11th &amp; 12th vertebrae.</div>
 <div class="answer-option">11th &amp; 12th vertebrae.</div>
-<div class="answer-option correct">12th vertebra only.</div>
+<div class="answer-option">12th vertebra only.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1267,7 +1479,7 @@
 <div class="answers">
 <div class="answer-option">Body, squamous &amp; horizontal parts.</div>
 <div class="answer-option">Squamous, petrous, tympanic &amp; mastoid parts.</div>
-<div class="answer-option correct">Body, lesser wing &amp; greater wing.</div>
+<div class="answer-option">Body, lesser wing &amp; greater wing.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
 </div>
@@ -1275,7 +1487,7 @@
 <span class="question-number">7</span>
 <span class="question-text">External auditory meatus lies in:</span>
 <div class="answers">
-<div class="answer-option correct">Temporal bone.</div>
+<div class="answer-option">Temporal bone.</div>
 <div class="answer-option">Occipital bone.</div>
 <div class="answer-option">Sphenoid bone.</div>
 <div class="answer-option">None of the above.</div>
@@ -1287,7 +1499,7 @@
 <div class="answers">
 <div class="answer-option">Ethmoid bone.</div>
 <div class="answer-option">Sphenoid bone.</div>
-<div class="answer-option correct">Maxillary bone.</div>
+<div class="answer-option">Maxillary bone.</div>
 <div class="answer-option">Frontal bone.</div>
 </div>
 </div>
@@ -1296,7 +1508,7 @@
 <span class="question-text">Styloid process arises from:</span>
 <div class="answers">
 <div class="answer-option">Frontal bone.</div>
-<div class="answer-option correct">Temporal bone.</div>
+<div class="answer-option">Temporal bone.</div>
 <div class="answer-option">Occipital bone.</div>
 <div class="answer-option">Ethmoid bone.</div>
 </div>
@@ -1307,7 +1519,7 @@
 <div class="answers">
 <div class="answer-option">Bregma.</div>
 <div class="answer-option">Lambda.</div>
-<div class="answer-option correct">Parietal eminences.</div>
+<div class="answer-option">Parietal eminences.</div>
 <div class="answer-option">Nasion.</div>
 </div>
 </div>
@@ -1317,7 +1529,7 @@
 <div class="answers">
 <div class="answer-option">Base of the skull.</div>
 <div class="answer-option">Sides of the skull.</div>
-<div class="answer-option correct">Both of them.</div>
+<div class="answer-option">Both of them.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
 </div>
@@ -1326,7 +1538,7 @@
 <span class="question-text">Petrous bone:</span>
 <div class="answers">
 <div class="answer-option">Is part of sphenoid bone.</div>
-<div class="answer-option correct">Encloses the internal ear organs.</div>
+<div class="answer-option">Encloses the internal ear organs.</div>
 <div class="answer-option">Mandibular fossa is seen in its inferior surface.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
@@ -1337,7 +1549,7 @@
 <div class="answers">
 <div class="answer-option">Diaphragm.</div>
 <div class="answer-option">Liver &amp; spleen.</div>
-<div class="answer-option correct">Renal fascia &amp; fat.</div>
+<div class="answer-option">Renal fascia &amp; fat.</div>
 <div class="answer-option">Its fibrous capsule.</div>
 </div>
 </div>
@@ -1346,7 +1558,7 @@
 <span class="question-text">In pelvi-calyceal system:</span>
 <div class="answers">
 <div class="answer-option">4 major calyces.</div>
-<div class="answer-option correct">8-14 minor calyces.</div>
+<div class="answer-option">8-14 minor calyces.</div>
 <div class="answer-option">25 minor calyces.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
@@ -1356,7 +1568,7 @@
 <span class="question-text">2 cm is the length of:</span>
 <div class="answers">
 <div class="answer-option">Prostatic urethra.</div>
-<div class="answer-option correct">Membranous urethra.</div>
+<div class="answer-option">Membranous urethra.</div>
 <div class="answer-option">Both of them.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
@@ -1365,7 +1577,7 @@
 <span class="question-number">16</span>
 <span class="question-text">The urinary bladder:</span>
 <div class="answers">
-<div class="answer-option correct">Is a hollow distensible muscular organ.</div>
+<div class="answer-option">Is a hollow distensible muscular organ.</div>
 <div class="answer-option">Lies posterior to the uterus in females.</div>
 <div class="answer-option">Its inner walls are smooth when empty.</div>
 <div class="answer-option">All are wrong.</div>
@@ -1376,7 +1588,7 @@
 <span class="question-text">The membranous urethra:</span>
 <div class="answers">
 <div class="answer-option">Passes through the prostatic gland.</div>
-<div class="answer-option correct">Surrounded by the fibers of the external urethral sphincter.</div>
+<div class="answer-option">Surrounded by the fibers of the external urethral sphincter.</div>
 <div class="answer-option">Measures 4 cm.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
@@ -1385,7 +1597,7 @@
 <span class="question-number">18</span>
 <span class="question-text">The renal sinus is found at:</span>
 <div class="answers">
-<div class="answer-option correct">The medial region of the kidney.</div>
+<div class="answer-option">The medial region of the kidney.</div>
 <div class="answer-option">The lateral region of the kidney.</div>
 <div class="answer-option">The anterior surface of the kidney.</div>
 <div class="answer-option">The posterior surface of the kidney.</div>
@@ -1397,7 +1609,7 @@
 <div class="answers">
 <div class="answer-option">When the bladder is full.</div>
 <div class="answer-option">At the outer wall of the bladder.</div>
-<div class="answer-option correct">When the bladder is empty.</div>
+<div class="answer-option">When the bladder is empty.</div>
 <div class="answer-option">All are true.</div>
 </div>
 </div>
@@ -1405,7 +1617,7 @@
 <span class="question-number">20</span>
 <span class="question-text">The liver consists of:</span>
 <div class="answers">
-<div class="answer-option correct">8 segments.</div>
+<div class="answer-option">8 segments.</div>
 <div class="answer-option">7 segments.</div>
 <div class="answer-option">6 segments.</div>
 <div class="answer-option">5 segments.</div>
@@ -1418,7 +1630,7 @@
 <div class="answer-option">Renal artery.</div>
 <div class="answer-option">Ureter.</div>
 <div class="answer-option">Renal vein.</div>
-<div class="answer-option correct">All are true.</div>
+<div class="answer-option">All are true.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1427,7 +1639,7 @@
 <div class="answers">
 <div class="answer-option">Turning the palm of the hand down.</div>
 <div class="answer-option">Turning the palm of the hand up.</div>
-<div class="answer-option correct">Turning the sole of the foot outward.</div>
+<div class="answer-option">Turning the sole of the foot outward.</div>
 <div class="answer-option">Turning the sole of the foot inward.</div>
 </div>
 </div>
@@ -1438,7 +1650,7 @@
 <div class="answer-option">Head.</div>
 <div class="answer-option">Neck.</div>
 <div class="answer-option">Styloid process.</div>
-<div class="answer-option correct">Olecranon process.</div>
+<div class="answer-option">Olecranon process.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1446,7 +1658,7 @@
 <span class="question-text">The lesser tuberosity of the humerus is located:</span>
 <div class="answers">
 <div class="answer-option">At the lateral side of the humerus.</div>
-<div class="answer-option correct">At the anterior part of the humerus.</div>
+<div class="answer-option">At the anterior part of the humerus.</div>
 <div class="answer-option">Above the anatomical neck.</div>
 <div class="answer-option">Distal to the surgical neck.</div>
 </div>
@@ -1457,7 +1669,7 @@
 <div class="answers">
 <div class="answer-option">One lobe.</div>
 <div class="answer-option">Two lobes.</div>
-<div class="answer-option correct">Three lobes.</div>
+<div class="answer-option">Three lobes.</div>
 <div class="answer-option">Four lobes.</div>
 </div>
 </div>
@@ -1465,7 +1677,7 @@
 <span class="question-number">26</span>
 <span class="question-text">The shoulder joint is located between:</span>
 <div class="answers">
-<div class="answer-option correct">Glenoid cavity of scapula &amp; head of the humerus.</div>
+<div class="answer-option">Glenoid cavity of scapula &amp; head of the humerus.</div>
 <div class="answer-option">Head of the humerus &amp; acetabulum.</div>
 <div class="answer-option">It is a cartilaginous joint.</div>
 <div class="answer-option">All are wrong.</div>
@@ -1477,7 +1689,7 @@
 <div class="answers">
 <div class="answer-option">At the same level.</div>
 <div class="answer-option">Proximal to it.</div>
-<div class="answer-option correct">Distal to it.</div>
+<div class="answer-option">Distal to it.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
 </div>
@@ -1485,7 +1697,7 @@
 <span class="question-number">28</span>
 <span class="question-text">The lateral third of the clavicle:</span>
 <div class="answers">
-<div class="answer-option correct">Flat with superior &amp; inferior surfaces.</div>
+<div class="answer-option">Flat with superior &amp; inferior surfaces.</div>
 <div class="answer-option">Articulates with the sternum.</div>
 <div class="answer-option">Convex anteriorly.</div>
 <div class="answer-option">All are true.</div>
@@ -1498,7 +1710,7 @@
 <div class="answer-option">Its costal surface is the posterior surface.</div>
 <div class="answer-option">Has body, head &amp; greater tuberosity.</div>
 <div class="answer-option">Its inferior angle is at the 7th rib posteriorly.</div>
-<div class="answer-option correct">All are wrong.</div>
+<div class="answer-option">All are wrong.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1508,7 +1720,7 @@
 <div class="answer-option">Superior, medial &amp; lateral.</div>
 <div class="answer-option">Superior, inferior &amp; medial.</div>
 <div class="answer-option">Medial, inferior &amp; lateral.</div>
-<div class="answer-option correct">Superior, inferior &amp; lateral.</div>
+<div class="answer-option">Superior, inferior &amp; lateral.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1518,7 +1730,7 @@
 <div class="answer-option">Scaphoid.</div>
 <div class="answer-option">Trapezoid.</div>
 <div class="answer-option">Trapezium.</div>
-<div class="answer-option correct">Capitate.</div>
+<div class="answer-option">Capitate.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1527,7 +1739,7 @@
 <div class="answers">
 <div class="answer-option">A ligament.</div>
 <div class="answer-option">A tendon.</div>
-<div class="answer-option correct">A fibrocartilaginous structure.</div>
+<div class="answer-option">A fibrocartilaginous structure.</div>
 <div class="answer-option">All are true.</div>
 </div>
 </div>
@@ -1535,7 +1747,7 @@
 <span class="question-number">33</span>
 <span class="question-text">Medial means:</span>
 <div class="answers">
-<div class="answer-option correct">Structure nearer to the midline.</div>
+<div class="answer-option">Structure nearer to the midline.</div>
 <div class="answer-option">Structure farther from the midline.</div>
 <div class="answer-option">Structure nearer to the trunk.</div>
 <div class="answer-option">Structure farther from the trunk.</div>
@@ -1546,7 +1758,7 @@
 <span class="question-text">The medial malleolus in relation to the lateral malleolus is:</span>
 <div class="answers">
 <div class="answer-option">At the same level.</div>
-<div class="answer-option correct">Proximal to it.</div>
+<div class="answer-option">Proximal to it.</div>
 <div class="answer-option">Distal to it.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
@@ -1556,7 +1768,7 @@
 <span class="question-text">The largest tarsal bone is:</span>
 <div class="answers">
 <div class="answer-option">Talus.</div>
-<div class="answer-option correct">Calcaneus.</div>
+<div class="answer-option">Calcaneus.</div>
 <div class="answer-option">Navicular.</div>
 <div class="answer-option">Capitate.</div>
 </div>
@@ -1566,7 +1778,7 @@
 <span class="question-text">The medial condyle of the tibia in relation to its lateral condyle is:</span>
 <div class="answers">
 <div class="answer-option">Less prominent.</div>
-<div class="answer-option correct">More prominent.</div>
+<div class="answer-option">More prominent.</div>
 <div class="answer-option">Equal to it.</div>
 <div class="answer-option">None of the above.</div>
 </div>
@@ -1578,7 +1790,7 @@
 <div class="answer-option">Are 5 groups.</div>
 <div class="answer-option">Are seen in infants.</div>
 <div class="answer-option">The biggest is sphenoid.</div>
-<div class="answer-option correct">Open in the nasal cavity.</div>
+<div class="answer-option">Open in the nasal cavity.</div>
 </div>
 </div>
 <div class="question-card">
@@ -1588,14 +1800,14 @@
 <div class="answer-option">Lateral to sella turcica.</div>
 <div class="answer-option">Below frontal bone.</div>
 <div class="answer-option">In the sella turcica.</div>
-<div class="answer-option correct">Below sella turcica.</div>
+<div class="answer-option">Below sella turcica.</div>
 </div>
 </div>
 <div class="question-card">
 <span class="question-number">39</span>
 <span class="question-text">The zygomatic arch is formed from:</span>
 <div class="answers">
-<div class="answer-option correct">Temporal and zygomatic bones.</div>
+<div class="answer-option">Temporal and zygomatic bones.</div>
 <div class="answer-option">Occipital and zygomatic bones.</div>
 <div class="answer-option">Frontal and zygomatic bones.</div>
 <div class="answer-option">Temporal bone only.</div>
@@ -1607,7 +1819,7 @@
 <div class="answers">
 <div class="answer-option">Symphysis pubis.</div>
 <div class="answer-option">Obturator foramen.</div>
-<div class="answer-option correct">Sacro-iliac joint.</div>
+<div class="answer-option">Sacro-iliac joint.</div>
 <div class="answer-option">Iliac crest.</div>
 </div>
 </div>
@@ -1616,7 +1828,7 @@
 <span class="question-text">The longest part of the sternum is:</span>
 <div class="answers">
 <div class="answer-option">Manubrium.</div>
-<div class="answer-option correct">Body.</div>
+<div class="answer-option">Body.</div>
 <div class="answer-option">Xiphoid cartilage.</div>
 <div class="answer-option">Jugular notch.</div>
 </div>
@@ -1626,7 +1838,7 @@
 <span class="question-text">The leg is the part between:</span>
 <div class="answers">
 <div class="answer-option">Hip &amp; knee joints.</div>
-<div class="answer-option correct">Knee &amp; ankle joints.</div>
+<div class="answer-option">Knee &amp; ankle joints.</div>
 <div class="answer-option">Beyond ankle joint.</div>
 <div class="answer-option">All are wrong.</div>
 </div>
@@ -1677,7 +1889,7 @@
 <div class="answers">
 <div class="answer-option">Dura mater.</div>
 <div class="answer-option">Conus medullaris.</div>
-<div class="answer-option correct">Filum terminale.</div>
+<div class="answer-option correct">Cauda equina.</div>
 <div class="answer-option">All are true.</div>
 </div>
 </div>
@@ -1691,181 +1903,27 @@
 <div class="answer-option">All are wrong.</div>
 </div>
 </div>
-</body>
-</html>
-<!DOCTYPE html>
 
-<html dir="ltr" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Radiology Questions Part 2 (49-100)</title>
-<style>
-    body {
-      font-family: 'Cairo', 'Inter', Tahoma, Arial, sans-serif;
-      background-color: #fefefe;
-      color: #222831;
-      margin: 0;
-      padding: 40px 20px;
-      line-height: 1.6;
-      direction: ltr;
-    }
-    h1 {
-      font-weight: 900;
-      font-size: 2.8rem;
-      text-align: center;
-      color: #30475e;
-      margin-bottom: 12px;
-      letter-spacing: 1.3px;
-    }
-    .question-card {
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(48, 71, 94, 0.1);
-      padding: 25px 30px;
-      margin-bottom: 30px;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-      user-select: none;
-    }
-    .question-card:hover {
-      box-shadow: 0 12px 34px rgba(48, 71, 94, 0.15);
-      transform: translateY(-5px);
-    }
-    .question-number {
-      display: inline-block;
-      background: #0077b6;
-      color: white;
-      font-weight: 700;
-      font-size: 1.3rem;
-      width: 44px;
-      height: 44px;
-      line-height: 44px;
-      text-align: center;
-      border-radius: 50%;
-      margin-right: 18px;
-      box-shadow: 0 3px 12px rgba(0, 119, 182, 0.4);
-      vertical-align: middle;
-    }
-    .question-text {
-      font-weight: 700;
-      font-size: 1.28rem;
-      vertical-align: middle;
-      display: inline-block;
-      max-width: calc(100% - 70px);
-      color: #222831;
-    }
-    .answers {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .answer-option {
-      position: relative;
-      background: #e7e9f0;
-      border-radius: 12px;
-      padding: 14px 22px;
-      font-size: 1.08rem;
-      color: #222831;
-      cursor: default;
-      box-shadow: 0 3px 6px rgb(0 0 0 / 0.04);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      align-items: center;
-      user-select: none;
-    }
-    .answer-option:hover {
-      background-color: #dbe0f7;
-      box-shadow: 0 5px 8px rgb(0 0 0 / 0.1);
-    }
-    .answer-option[data-letter]::before {
-      content: attr(data-letter);
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      width: 34px;
-      height: 34px;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #0077b6;
-      background-color: #d6e4ff;
-      border-radius: 50%;
-      margin-left: 18px;
-      box-shadow: 0 2px 6px rgba(0,119,182,0.25);
-    }
-    .answer-option.correct {
-      background-color: #38a169;
-      color: #e6f4ea;
-      font-weight: 700;
-      box-shadow: 0 0 12px 3px rgba(56, 161, 105, 0.5);
-      border: 2px solid #27ae60;
-      cursor: default;
-    }
-    .answer-option.correct[data-letter]::before {
-      content: "✔";
-      font-size: 1.4rem;
-      color: #e6f4ea;
-      background-color: #2f855a;
-      box-shadow: 0 0 8px rgba(47, 133, 90, 0.8);
-    }
-    @media (max-width: 560px) {
-      body {
-        padding: 20px 16px;
-      }
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
-      .question-text {
-        font-size: 1.1rem;
-        max-width: calc(100% - 60px);
-      }
-      .question-card {
-        padding: 20px 22px;
-        margin-bottom: 24px;
-      }
-      .answer-option {
-        font-size: 1rem;
-        padding: 12px 18px;
-      }
-      .answer-option[data-letter]::before {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-        margin-left: 14px;
-      }
-      .question-number {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
-        line-height: 36px;
-        margin-right: 12px;
-      }
-    }
-  </style>
-</head>
-<body>
-<div class="question-card">
-<span class="question-number">49</span>
-<span class="question-text">The jejunum &amp; ileum:</span>
-<div class="answers">
-<div class="answer-option">Are parts of the large intestine.</div>
-<div class="answer-option">There is a well-defined point of demarcation between them.</div>
-<div class="answer-option correct">The jejunum is greater in diameter than the ileum.</div>
-<div class="answer-option">All are wrong.</div>
-</div>
-</div>
-<div class="question-card">
-<span class="question-number">50</span>
-<span class="question-text">The Wharton's duct is the duct of:</span>
-<div class="answers">
-<div class="answer-option">Parotid gland.</div>
-<div class="answer-option correct">Submandibular gland.</div>
-<div class="answer-option">Sublingual gland.</div>
-<div class="answer-option">Prostatic gland.</div>
-</div>
-</div>
+        </div>
+      </section>
+    </div>
+  </div>
 
+  <script>
+  
+// Tabs script (namespaced)
+(function(){
+  function openTab(id, btn){
+    document.querySelectorAll('._tab-btn').forEach(b=>b.classList.remove('_active'));
+    document.querySelectorAll('._panel').forEach(p=>p.classList.remove('_active'));
+    btn.classList.add('_active');
+    var target = document.getElementById(id);
+    if(target){ target.classList.add('_active'); window.scrollTo({top:0, behavior:'smooth'}); }
+  }
+  // Expose to buttons
+  window.__openTab = openTab;
+})();
+
+  </script>
 </body>
 </html>
