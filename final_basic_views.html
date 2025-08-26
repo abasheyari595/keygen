@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Radiological Anatomy – Basic Views (Final, Clean)</title>
+<style>
+  :root{
+    --primary:#0056b3;
+    --accent:#007BFF;
+    --key:#D9534F;
+    --ok:#5cb85c;
+    --paper:#ffffff;
+    --ink:#1f2937;
+    --muted:#6b7280;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Arial,Helvetica,sans-serif;line-height:1.55;background:#f4f6f8;color:var(--ink);margin:0}
+  .print-button-container{position:sticky;top:0;z-index:10;background:#111;padding:14px;text-align:center}
+  .print-button{padding:10px 18px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:15px;cursor:pointer}
+  .print-button:hover{filter:brightness(0.95)}
+  .page{background:var(--paper);width:210mm;min-height:297mm;margin:18px auto;padding:16mm;border-radius:10px;
+        box-shadow:0 4px 20px rgba(0,0,0,.07);page-break-after:always}
+  h1{margin:0 0 12px;text-align:center;color:var(--primary);font-size:24pt;border-bottom:2px solid var(--accent);padding-bottom:6px}
+  h2{margin:18px 0 8px;color:var(--accent);font-size:18pt;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+  h3{margin:12px 0 4px;color:#0f172a;font-size:13.5pt}
+  ul{margin:6px 0 14px 18px}
+  li{margin:4px 0}
+  strong{color:var(--key)}
+  .note{font-style:italic;color:var(--ok)}
+  @media print{
+    body{background:#fff;margin:0}
+    .print-button-container{display:none}
+    .page{margin:0;box-shadow:none;border-radius:0;padding:12mm}
+  }
+</style>
+</head>
+<body>
+<div class="print-button-container">
+  <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="page">
+  <h1>Radiological Anatomy – Basic Views (Final)</h1>
+
+  <!-- Upper Airway -->
+  <h2>Upper Respiratory Airway</h2>
+  <h3>Pharynx — Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Standing/sitting lateral; shoulder on bucky; neck gently extended.</li>
+    <li><strong>CR:</strong> Perpendicular to the angle of the mandible.</li>
+    <li><strong>Collimation:</strong> Skull base → lower neck; nose → behind cervical spine.</li>
+  </ul>
+  <h3>Larynx — Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> As above.</li>
+    <li><strong>CR:</strong> Perpendicular to the laryngeal cartilage.</li>
+    <li><strong>Collimation:</strong> Nose → thoracic inlet; anterior skin → behind cervical spine.</li>
+  </ul>
+
+  <!-- Chest -->
+  <h2>Chest X‑Ray</h2>
+  <h3>PA (Postero‑Anterior)</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Chest on bucky; hands on hips; shoulders rolled forward; chin up; cassette top ≈ 2&nbsp;cm above shoulders.</li>
+    <li><strong>CR:</strong> Midline at level of <strong>T5</strong> (after deep inspiration; hold breath).</li>
+    <li><strong>Collimation:</strong> Apices → costophrenic angles; lateral chest walls included.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Side on bucky; arms raised above head; <span class="note">Left lateral is standard</span>.</li>
+    <li><strong>CR:</strong> Mid‑axillary line, centered on bucky.</li>
+  </ul>
+  <h3>AP (Antero‑Posterior)</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Back to bucky (or portable/supine if non‑ambulant); hands on waist to move scapulae.</li>
+    <li><strong>CR:</strong> Over the sternal angle.</li>
+  </ul>
+  <h3>Lordotic View</h3>
+<ul>
+<li><strong>Purpose:</strong> To visualize lesions in the right middle lobe or encysted pleural effusion.</li>
+<li><strong>Positioning:</strong> AP position where the patient leans back significantly, so the shoulders touch the bucky while their body is forward.</li>
+<li><strong>CR:</strong> Horizontal to the mid-sternum.</li>
+</ul>
+  <!-- Shoulder -->
+  <h2>Shoulder</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Back to cassette; arm slightly abducted; hand supinated.</li>
+    <li><strong>CR:</strong> Coracoid process. <span class="note">Breath hold.</span></li>
+  </ul>
+  <h3>Axial (Infero‑superior)</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Supine; shoulder at cassette edge; arm abducted (≈ 90° if tolerated).</li>
+    <li><strong>CR:</strong> Horizontal into axilla toward humeral head.</li>
+  </ul>
+
+  <!-- Clavicle -->
+  <h2>Clavicle</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Supine/standing AP.</li>
+    <li><strong>CR:</strong> 90° to mid‑clavicle.</li>
+  </ul>
+  <h3>PA</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Sitting/standing PA; slight rotation to place clavicle on cassette; head turned away.</li>
+    <li><strong>CR:</strong> Mid‑clavicle.</li>
+  </ul>
+
+  <!-- Humerus -->
+  <h2>Humerus</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Back of arm on cassette; slight abduction; condyles parallel to table.</li>
+    <li><strong>CR:</strong> Mid‑humeral shaft.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Elbow flexed 90°; arm internally rotated; hand on lower abdomen.</li>
+    <li><strong>CR:</strong> Mid‑humeral shaft.</li>
+  </ul>
+
+  <!-- Elbow -->
+  <h2>Elbow</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Arm on same plane; forearm fully extended; hand supinated.</li>
+    <li><strong>CR:</strong> Elbow joint (≈ 2&nbsp;cm below humeral epicondyles).</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Flexed 90°; thumb up (true lateral).</li>
+  </ul>
+
+  <!-- Forearm -->
+  <h2>Forearm</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Hand supinated; include wrist and elbow.</li>
+    <li><strong>CR:</strong> Middle of forearm.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Elbow 90°; hand lateral; include both joints.</li>
+    <li><strong>CR:</strong> Middle of forearm.</li>
+  </ul>
+
+  <!-- Wrist -->
+  <h2>Wrist</h2>
+  <h3>PA</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Forearm on table; palm down.</li>
+    <li><strong>CR:</strong> Dorsum of wrist between styloid processes.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> From PA, rotate 90° (ulnar side down).</li>
+    <li><strong>CR:</strong> Radial styloid.</li>
+  </ul>
+
+  <!-- Hand -->
+  <h2>Hand</h2>
+  <h3>PA</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Palm flat; fingers slightly separated.</li>
+    <li><strong>CR:</strong> 3rd metacarpal head.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Ulnar border on cassette (true lateral).</li>
+  </ul>
+
+  <!-- Fingers / Thumb -->
+  <h2>Fingers &amp; Thumb</h2>
+  <h3>Fingers — PA &amp; Lateral</h3>
+  <ul>
+    <li><strong>CR:</strong> PIP joint of the finger of interest.</li>
+  </ul>
+  <h3>Thumb — AP &amp; Lateral</h3>
+  <ul>
+    <li><strong>CR:</strong> Interphalangeal (IP) joint.</li>
+  </ul>
+
+  <!-- Pelvis & Hips -->
+  <h2>Pelvis &amp; Hip</h2>
+  <h3>AP Pelvis (Both Hips)</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Supine; internally rotate feet 15–20° (heels ~20–25&nbsp;cm apart).</li>
+    <li><strong>CR:</strong> Midline, 5&nbsp;cm above symphysis pubis.</li>
+    <li><strong>Respiration:</strong> Suspend on expiration.</li>
+  </ul>
+  <h3>AP Hip (Single)</h3>
+  <ul>
+    <li><strong>Positioning:</strong> As AP pelvis (internal rotation).</li>
+    <li><strong>CR:</strong> 6&nbsp;cm below midpoint of line between ASIS and symphysis (femoral neck).</li>
+  </ul>
+  <h3>Lateral Hip (Frog‑Leg)</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Supine; flex and abduct affected hip (frog‑leg).</li>
+    <li><strong>CR:</strong> Skin crease in inguinal region.</li>
+  </ul>
+
+  <!-- SI / Sacrum / Coccyx -->
+  <h2>SI Joints, Sacrum &amp; Coccyx</h2>
+  <h3>SI Joints — AP (Cephalic) or PA (Caudal)</h3>
+  <ul>
+    <li><strong>AP:</strong> Supine; <strong>CR:</strong> 5&nbsp;cm above symphysis with ~25° cephalic angulation.</li>
+    <li><strong>PA:</strong> Prone; <strong>CR:</strong> Between SI joints with ~10° caudal angulation.</li>
+  </ul>
+  <h3>Sacrum &amp; Coccyx — AP &amp; Lateral</h3>
+  <ul>
+    <li><strong>AP Sacrum:</strong> Legs flexed; <strong>CR:</strong> 5&nbsp;cm above symphysis with ~15° cephalic angle.</li>
+    <li><strong>AP Coccyx:</strong> Legs flexed; <strong>CR:</strong> 5&nbsp;cm above symphysis with ~10° caudal angle.</li>
+    <li><strong>Lateral:</strong> True lateral; <strong>CR (Sacrum):</strong> ~10&nbsp;cm posterior to ASIS; <strong>CR (Coccyx):</strong> over coccyx.</li>
+  </ul>
+
+  <!-- Femur & Knee -->
+  <h2>Femur &amp; Knee</h2>
+  <h3>Femur — AP &amp; Lateral</h3>
+  <ul>
+    <li><strong>AP:</strong> Supine; leg extended and internally rotated ~15°; <strong>CR:</strong> Mid‑cassette.</li>
+    <li><strong>Lateral:</strong> Side‑lying; knee flexed ~45°; <strong>CR:</strong> Mid‑cassette.</li>
+  </ul>
+  <h3>Knee — AP &amp; Lateral</h3>
+  <ul>
+    <li><strong>AP:</strong> Leg straight; <strong>CR:</strong> 1&nbsp;cm below lower pole patella (angle by habitus: thin 5° caudal, average 0°, obese 5° cephalic).</li>
+    <li><strong>Lateral:</strong> Knee flexed ~30°; <strong>CR:</strong> Anterior part of femoral condyle.</li>
+  </ul>
+
+  <!-- Leg & Ankle -->
+  <h2>Leg (Tibia &amp; Fibula) &amp; Ankle</h2>
+  <h3>Leg — AP &amp; Lateral</h3>
+  <ul>
+    <li><strong>AP:</strong> Supine; leg extended (slight medial rotation).</li>
+    <li><strong>Lateral:</strong> Side of leg on cassette.</li>
+    <li><strong>CR (both):</strong> Mid‑leg.</li>
+  </ul>
+  <h3>Ankle — AP &amp; Lateral</h3>
+  <ul>
+    <li><strong>AP:</strong> Supine; knee extended; ankle dorsiflexed to 90°.</li>
+    <li><strong>Lateral:</strong> Ankle lateral on cassette; dorsiflexed to 90°.</li>
+    <li><strong>CR (both):</strong> On ankle joint (AP: midway between malleoli; Lateral: medial malleolus).</li>
+  </ul>
+
+  <!-- Heel & Foot -->
+  <h2>Heel (Calcaneus) &amp; Foot</h2>
+  <h3>Calcaneus — Lateral &amp; Axial</h3>
+  <ul>
+    <li><strong>Lateral:</strong> Foot lateral; dorsiflexed 90°; <strong>CR:</strong> Upper calcaneus.</li>
+    <li><strong>Axial:</strong> Dorsiflexed (toes pulled back); <strong>CR:</strong> ~30° cephalic to plantar surface.</li>
+  </ul>
+  <h3>Foot — AP (DP) &amp; Lateral</h3>
+  <ul>
+    <li><strong>AP (Dorsi‑Plantar):</strong> Sole flat on cassette; <strong>CR:</strong> 90° to tarsal bones.</li>
+    <li><strong>Lateral:</strong> Foot lateral on cassette.</li>
+  </ul>
+
+  <!-- Spine -->
+  <h2>Cervical Spine</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Chin forward and up.</li>
+    <li><strong>CR:</strong> C4 with ~15–20° cephalic angle.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Shoulders depressed to show C7; chin forward.</li>
+    <li><strong>CR:</strong> Horizontal at C3–C4.</li>
+  </ul>
+
+  <h2>Dorsal (Thoracic) Spine</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Supine; legs flexed; expose after deep inspiration.</li>
+    <li><strong>CR:</strong> D7 (mid‑sternum) to cassette center.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Lateral; arms above head.</li>
+    <li><strong>CR:</strong> Through axilla at D6.</li>
+  </ul>
+
+  <h2>Lumbosacral Spine</h2>
+  <h3>AP</h3>
+  <ul>
+    <li><strong>Positioning:</strong> Supine; hips/knees flexed to flatten lumbar lordosis.</li>
+    <li><strong>CR:</strong> Midline, ~3&nbsp;cm above iliac crest.</li>
+  </ul>
+  <h3>Lateral</h3>
+  <ul>
+    <li><strong>Positioning:</strong> True lateral; pad under waist to avoid sag.</li>
+    <li><strong>CR:</strong> Mid‑axillary line, ~3&nbsp;cm above iliac crest.</li>
+  </ul>
+
+</div>
+</body>
+</html>
